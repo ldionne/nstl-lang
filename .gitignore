@@ -1,6 +1,4 @@
-pycparser*
-ply*
-_generated*
 __pycache__/*
+*.pyc
 _lextab.py
 _yacctab.py
