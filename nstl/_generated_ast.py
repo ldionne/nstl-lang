@@ -155,10 +155,10 @@ class Namespace(Node):
     attr_names = ()
 
 class Template(Node):
-    def __init__(self, name, params, contents, coord=None):
+    def __init__(self, name, params, body, coord=None):
         self.name = name
         self.params = params
-        self.contents = contents
+        self.body = body
         self.coord = coord
 
     def children(self):
@@ -166,8 +166,8 @@ class Template(Node):
         if self.name is not None: nodelist.append(("name", self.name))
         for i, child in enumerate(self.params or []):
             nodelist.append(("params[%d]" % i, child))
-        for i, child in enumerate(self.contents or []):
-            nodelist.append(("contents[%d]" % i, child))
+        for i, child in enumerate(self.body or []):
+            nodelist.append(("body[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
