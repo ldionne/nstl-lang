@@ -68,6 +68,46 @@ unique_incr = Template("""
 """)
 
 
+class ScopeStack(object):
+    """A class representing nested scopes.
+    """
+    def __init__(self):
+        self.scopes = [{ }]
+    
+    def enterscope(self):
+        self.scopes.append({ })
+    
+    def exitscope(self):
+        self.scopes.pop()
+    
+    def bind(self, name, object):
+        """Bind a name to an object inside the current scope.
+        """
+        self.scopes[-1][name] = object
+    
+    def resolve(self, name):
+        """Return the object binding to a name, if the name is in scope.
+        """
+        for scope in reversed(self.scopes):
+            try:
+                return scope[name]
+            except KeyError:
+                continue
+        raise NameError("name {} is not in scope".format(name))
+    
+    def inscope(self, name):
+        """Return whether a name is reachable from the current scope.
+        """
+        return any(name in scope for scope in reversed(self.scopes))
+    
+    def show(self):
+        lead = ''
+        for scope in self.scopes:
+            for name, object in scope.items():
+                print("{}{} : {}".format(lead, name, object))
+            lead = lead + ' ' * 4
+
+
 
 class Generator(ast.NodeAccumulator):
     def __init__(self, env=NstlDefaultEnvironment):
