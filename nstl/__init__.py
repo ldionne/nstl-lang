@@ -1,6 +1,6 @@
 
 
-__all__ = ['nstl_lex', 'nstl_parse', 'nstl_ast', 'nstl_gen']
+__all__ = ['lex', 'parse', 'ast', 'gen']
 __version__ = '1.0'
 
 

@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------
 # ** ATTENTION **
 # This code was automatically generated from the file:
-# nstl_ast.cfg 
+# ast.cfg 
 #
 # Do not modify it directly. Modify the configuration file and
 # run the generator again.

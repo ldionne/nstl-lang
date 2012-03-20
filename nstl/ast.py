@@ -1,5 +1,5 @@
 
-from ._generated_nstl_ast import *
+from ._generated_ast import *
 
 
 def augment(cls):

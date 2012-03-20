@@ -1,6 +1,6 @@
 
 from string import Template
-from . import nstl_ast
+from . import ast
 
 """
 Note : Binary search inside directives should be implemented soon to improve
@@ -69,7 +69,7 @@ unique_incr = Template("""
 
 
 
-class Generator(nstl_ast.NodeAccumulator):
+class Generator(ast.NodeAccumulator):
     def __init__(self, env=NstlDefaultEnvironment):
         self.env = env
     

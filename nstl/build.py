@@ -6,4 +6,4 @@ def generate_ast_classes(in_file, out_file):
     gen = ASTCodeGenerator(in_file)
     gen.generate(open(out_file, 'w'))
 
-generate_ast_classes(in_file='nstl_ast.cfg', out_file='_generated_nstl_ast.py')
+generate_ast_classes(in_file='ast.cfg', out_file='_generated_ast.py')

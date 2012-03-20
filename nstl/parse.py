@@ -1,8 +1,8 @@
 
 from . import ply
 from .ply import yacc
-from . import nstl_ast
-from . import nstl_lex
+from . import ast
+from . import lex
 
 
 
@@ -16,7 +16,7 @@ class NstlParser(object):
 					yaccoptimize=True, yacctab='_yacctab', yaccdebug=False):
 		"""Create a new parser for the nstl micro-language.
 		"""
-		self.lexer = nstl_lex.NstlLexer()
+		self.lexer = lex.NstlLexer()
 		self.lexer.build(optimize=lexoptimize, lextab=lextab)
 		self.tokens = self.lexer.tokens
 		self.parser = ply.yacc.yacc(module=self, debug=yaccdebug,
@@ -41,7 +41,7 @@ class NstlParser(object):
 		"""input : nothing
 				 | def-list
 		"""
-		p[0] = nstl_ast.Program(p[1] or [ ])
+		p[0] = ast.Program(p[1] or [ ])
 	
 	
 	
@@ -59,7 +59,7 @@ class NstlParser(object):
 	def p_import_statement(self, p):
 		"""import-stmnt : tIMPORT arg-expr-list
 		"""
-		p[0] = nstl_ast.Import(p[2])
+		p[0] = ast.Import(p[2])
 	
 	
 	
@@ -79,7 +79,7 @@ class NstlParser(object):
 		"""namespace-def : tNAMESPACE identifier tLBRACE nothing tRBRACE
 						 | tNAMESPACE identifier tLBRACE def-list tRBRACE
 		"""
-		p[0] = nstl_ast.Namespace(p[2], p[4] or [ ])
+		p[0] = ast.Namespace(p[2], p[4] or [ ])
 	
 	
 	
@@ -87,7 +87,7 @@ class NstlParser(object):
 	def p_template_definition(self, p):
 		"""template-def : template-begin template-params template-body
 		"""
-		p[0] = nstl_ast.Template(p[1], p[2] or [ ], p[3] or [ ])
+		p[0] = ast.Template(p[1], p[2] or [ ], p[3] or [ ])
 	
 	def p_template_begin(self, p):
 		"""template-begin : tTEMPLATE identifier
@@ -126,13 +126,13 @@ class NstlParser(object):
 	def p_postfix_expression__scope_op(self, p):
 		"""postfix-expr : postfix-expr tPERIOD identifier
 		"""
-		p[0] = nstl_ast.ScopeOp(p[1], p[3])
+		p[0] = ast.ScopeOp(p[1], p[3])
 	
 	def p_postfix_expression__call_op(self, p):
 		"""postfix-expr : postfix-expr tLPAREN nothing tRPAREN
 						| postfix-expr tLPAREN arg-list tRPAREN
 		"""
-		p[0] = nstl_ast.CallOp(p[1], p[3] or [ ])
+		p[0] = ast.CallOp(p[1], p[3] or [ ])
 	
 	
 	def p_primary_expression__ident(self, p):
@@ -168,9 +168,9 @@ class NstlParser(object):
 			   | param-id tEQUALS expr
 		"""
 		if len(p) > 2:
-			p[0] = nstl_ast.Argument(p[3], p[1])
+			p[0] = ast.Argument(p[3], p[1])
 		else:
-			p[0] = nstl_ast.Argument(p[1], None)
+			p[0] = ast.Argument(p[1], None)
 	
 	
 	
@@ -186,12 +186,12 @@ class NstlParser(object):
 		"""param : param-id
 				 | param-id tEQUALS expr
 		"""
-		p[0] = nstl_ast.Parameter(p[1], p[3] if len(p) > 2 else None)
+		p[0] = ast.Parameter(p[1], p[3] if len(p) > 2 else None)
 	
 	def p_parameter_identifier(self, p):
 		"""param-id : tID param-id-params
 		"""
-		p[0] = nstl_ast.ParameterId(p[1], p[2])
+		p[0] = ast.ParameterId(p[1], p[2])
 	
 	def p_parameter_identifier_params(self, p):
 		"""param-id-params : nothing
@@ -211,7 +211,7 @@ class NstlParser(object):
 	def p_identifier(self, p):
 		"""identifier : tID
 		"""
-		p[0] = nstl_ast.Identifier(p[1])
+		p[0] = ast.Identifier(p[1])
 	
 	def p_identifier_list(self, p):
 		"""identifier-list : identifier
@@ -225,7 +225,7 @@ class NstlParser(object):
 		"""rawinput : tRAWBEGIN nothing tRAWEND
 					| tRAWBEGIN rawinput_aux tRAWEND
 		"""
-		p[0] = nstl_ast.Raw("" if p[2] is None else "".join(p[2]))
+		p[0] = ast.Raw("" if p[2] is None else "".join(p[2]))
 	
 	def p_rawinput_aux(self, p):
 		"""rawinput_aux : tRAWINPUT
