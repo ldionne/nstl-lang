@@ -216,79 +216,133 @@ class Generator(ast.NodeAccumulator):
         defaults = filter(lambda param: param.hasdefault(), node.params)
         defaults = (prepare(param) for param in defaults)
         all_params = (prepare(param) for param in node.params)
+class CodeEmitter(TemplatedEmitter):
+    def __init__(self, env=NstlDefaultEnvironment, *args, **kwargs):
+        super().__init__(*args, env=env, **kwargs)
+    
+    def emit(self, output, newline=True, **env):
+        if isinstance(output, str):
+            for line in filter(None, map(str.lstrip, output.splitlines())):
+                super().emit(line, newline, **env)
         
-        return "\n".join([
-        self._signalize(node.name),
-        self._init_args(defaults, all_params),
+        elif isiterable(output):
+            for elt in output:
+                self.emit(elt, newline, **env)
         
-        self.passon(node, *args, **kwargs),
+        elif iscallable(input):
+            rv = output(**env)
+            if rv: self.emit(rv, newline, **env)
         
-        self._clean_args((param.keyword.name for param in node.params)),
-        ])
+        else:
+            raise TypeError(
+                "an object of {} type can not be emitted".format(type(output)))
     
     
-    
-    def visit_Import(self, node, *args, **kwargs):
-        return "visit_Import\n"
-    
-    
-    
-    def visit_CallOp(self, node, *args, **kwargs):
-        return "visit_CallOp\n"
+    def emit_template_heading(self, template, **env):
+        self.emit("${nstl_unique_incr}", **env)
+        self._emit_for_all_depths(
+        "#define ${name}_${depth}_H 1",
+        name=template.name, **env)
     
     
-    
-    #
-    # Helpers
-    #
-    def _substitute_with(self, variant, text, **env):
-        assert isinstance(variant, str)
-        max_reps = getattr(self.env, 'max'+variant)
-        stream = self._variable_subs(variant, text, range(max_reps), **env)
-        acc = [ ]
-        #implement binary search
-        for i, atom in enumerate(stream):
-            acc.append(atom)
-        return "\n".join(acc)
-    
-    
-    def _variable_subs(self, variant, text, generator, **env):
-        before = "#if $nstl_{0} == ${0}".format(variant)
-        after = "#endif"
-        text = Template("\n".join([before, text, after]))
-        for i in generator:
-            env[variant] = i
-            yield text.substitute(self.env, **env)
-    
-    
-    def _signalize(self, template_name):
-        action = "#define ${template_name}_${depth}_H 1"
-        return self._substitute_with('depth', action, template_name=template_name)
-    
-    
-    def _init_args(self, default_args, all_args):
-        define_defaults = self._define_args(default_args)
-        assert_all_defined = "\n".join(Template("\n".join([
-        "#if !defined (${arg}_$unique)",
-        "#error \"Missing template argument $arg.\"",
-        "#endif"
-        ])).substitute(arg=arg[0], unique='$unique') for arg in all_args)
+    def emit_params_initialization(self, params, **env):
+        if not params:
+            return
         
-        action = "\n".join([define_defaults, assert_all_defined])
-        return self._substitute_with('unique', action)
+        def emit_them(**env):
+            rest = [ ]
+            for param in filter(lambda p: p.hasdefault() or rest.append(p),
+                                                                       params):
+                self._emit_param_default(param, **env)
+            
+            for param in rest:
+                self.emit("""
+                #if ! defined (${param}_${unique})
+                ${indent}#error "missing argument to template parameter $param"
+                #endif
+                """, param=param.keyword.name, **env)
+        
+        self._emit_for_all_uniques(emit_them, **env)
     
-    
-    def _clean_args(self, arg_names):
-        action = self._undef_args(arg_names)
-        return self._substitute_with('unique', action)
-    
-    
-    def _define_args(self, args):
-        """args must be an iterable of tuples like this:
-        (argument_name, argument_parameters, argument_definition)
+    def _emit_param_default(self, param, **env):
+        """Emit the definition of a parameter with a default argument.
         """
-        arg_template = lambda arg: "#define {}_$unique{} {}".format(*arg)
-        return "\n".join(arg_template(arg) for arg in args)
+        kw = param.keyword
+        self.emit("""
+        #if ! defined (${name}_${unique})
+        ${indent}""" + self._defmacro(kw.name, kw.params, param.default) + """
+        #endif
+        """, name=kw.name, **env)
+    
+    
+    def emit_params_cleanup(self, params, **env):
+        """Emit the cleaning of parameters after a template.
+        """
+        if not params:
+            return
+        
+        undefs = [self._undefmacro(param.keyword.name) for param in params]
+        self._emit_for_all_uniques(undefs, **env)
+    
+    
+    def emit_call(self, call, **env):
+        """Emit a call to a template.
+        
+        call.path   the home path of the template
+        call.args   the arguments to the call
+        """
+        args = [self._defmacro(arg.keyword.name, arg.keyword.params, arg.value)
+                                                        for arg in call.args]
+        if args:
+            self._emit_for_all_uniques(args, **env)
+        
+        self.emit("""
+        ${nstl_depth_incr}
+        #include <${path}>
+        ${nstl_depth_decr}
+        """, path=call.path, **env)
+    
+    
+    def emit_import(self, templates, **env):
+        """Emit the importation of one or many templates.
+        """
+        for template in templates:
+            self.emit("""
+            #if CONCAT(${name}, _, ${nstl_depth}, _H) != 1
+            ${indent}#include <${path}>
+            #endif
+            """, path=template.path, name=template.name, **env)
+    
+    
+    def _defmacro(self, name, params, body):
+        """Generate and return the definition of a macro.
+        """
+        params = "(" + ", ".join(params) + ")" if params is not None else ''
+        return "#define {}_$unique{} {}".format(name, params, body)
+    
+    
+    def _undefmacro(self, macro_name):
+        """Generate and return the undefinition of a macro.
+        """
+        return "#undef {}_$unique".format(macro_name)
+    
+    
+    def _emit_for_all_uniques(self, output, **env):
+        # TODO Implement binary search
+        for unique in range(self.env.maxunique):
+            self.emit("#if ${nstl_unique} == ${unique}", unique=unique, **env)
+            self.emit_indented(output, unique=unique, **env)
+            self.emit("#endif", **env)
+    
+    
+    def _emit_for_all_depths(self, output, **env):
+        # TODO Implement binary search
+        for depth in range(self.env.maxdepth):
+            self.emit("#if ${nstl_depth} == ${depth}", depth=depth, **env)
+            self.emit_indented(output, depth=depth, **env)
+            self.emit("#endif", **env)
+
+
     
     
     def _undef_args(self, args):
