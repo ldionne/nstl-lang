@@ -26,6 +26,65 @@ class Environment(dict):
             self[attr] = value
         else:
             super().__setattr__(attr, value)
+class StructuredEmitter(object):
+    """A class to handle emitting output to a stream in a structured way.
+    """
+    def __init__(self, ostream=sys.stdout, indent=' '*4):
+        self._ostream = ostream
+        self._knownstreams = { }
+        self._indent_level = 0
+        self._indent_str = indent
+    
+    
+    def setstream(self, ostream, reset=True):
+        """Remembers the current stream and its associated state.
+        If reset is True and the stream was not previously used with this
+        emitter, the indentation level starts over at 0. In all cases, if
+        the stream was previously used with this emitter, state in which the
+        stream was left is restored. The resetindent() method can be called
+        in order to manually reset the state.
+        """
+        self._knownstreams[self._ostream] = self._indent_level
+        if ostream in self._knownstreams:
+            self._indent_level = self._knownstreams[ostream]
+        elif reset:
+            self.resetindent()
+        self._ostream = ostream
+    
+    
+    def emit(self, text, newline=True):
+        self._ostream.write(self.indentation() + text + '\n' if newline else'')
+    
+    
+    def emit_indented(self, text, newline=True):
+        self.indent()
+        self.emit(text, newline)
+        self.dedent()
+    
+    
+    def indentation(self):
+        return self._indent_level * self.indent_str()
+    
+    
+    def resetindent(self):
+        self._indent_level = 0
+    
+    
+    def indent_str(self):
+        return self._indent_str
+    
+    
+    def indent(self):
+        """Add an indent level to the emitted code.
+        """
+        self._indent_level += 1
+    
+    
+    def dedent(self):
+        """Remove an indent level to the emitted code.
+        """
+        self._indent_level -= 1
+
 
 
 
