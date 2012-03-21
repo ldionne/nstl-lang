@@ -1,6 +1,10 @@
 
 from string import Template
+
 from . import ast
+from string import Template
+import sys
+
 
 """
 Note : Binary search inside directives should be implemented soon to improve
@@ -85,6 +89,36 @@ class StructuredEmitter(object):
         """
         self._indent_level -= 1
 
+
+
+class TemplatedEmitter(StructuredEmitter):
+    """A class to emit templated output.
+    """
+    def __init__(self, env=Environment(), *args, **kwargs):
+        assert isinstance(env, Environment)
+        
+        super().__init__(*args, **kwargs)
+        self.env = env
+        self.env.indent = self.indent_str()
+    
+    
+    def emit(self, text, newline=True, **env):
+        text = self.subs(text, **env)
+        return self.emit_raw(text, newline)
+    
+    
+    def emit_raw(self, text, newline=True):
+        return super().emit(text, newline)
+    
+    
+    def emit_indented(self, text, newline=True, **env):
+        self.indent()
+        self.emit(text, newline, **env)
+        self.dedent()
+    
+    
+    def subs(self, text, **env):
+        return Template(text).substitute(self.env, **env)
 
 
 
