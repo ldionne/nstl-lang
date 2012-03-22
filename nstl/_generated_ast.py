@@ -127,29 +127,29 @@ class NodeVisitor(object):
 
 
 class Program(Node):
-    def __init__(self, defs, coord=None):
-        self.defs = defs
+    def __init__(self, decls, coord=None):
+        self.decls = decls
         self.coord = coord
 
     def children(self):
         nodelist = []
-        for i, child in enumerate(self.defs or []):
-            nodelist.append(("defs[%d]" % i, child))
+        for i, child in enumerate(self.decls or []):
+            nodelist.append(("decls[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
 
 class Namespace(Node):
-    def __init__(self, name, members, coord=None):
+    def __init__(self, name, decls, coord=None):
         self.name = name
-        self.members = members
+        self.decls = decls
         self.coord = coord
 
     def children(self):
         nodelist = []
         if self.name is not None: nodelist.append(("name", self.name))
-        for i, child in enumerate(self.members or []):
-            nodelist.append(("members[%d]" % i, child))
+        for i, child in enumerate(self.decls or []):
+            nodelist.append(("decls[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
@@ -164,42 +164,28 @@ class Template(Node):
     def children(self):
         nodelist = []
         if self.name is not None: nodelist.append(("name", self.name))
+        if self.body is not None: nodelist.append(("body", self.body))
         for i, child in enumerate(self.params or []):
             nodelist.append(("params[%d]" % i, child))
-        for i, child in enumerate(self.body or []):
-            nodelist.append(("body[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
 
-class Import(Node):
-    def __init__(self, templates, coord=None):
-        self.templates = templates
-        self.coord = coord
-
-    def children(self):
-        nodelist = []
-        for i, child in enumerate(self.templates or []):
-            nodelist.append(("templates[%d]" % i, child))
-        return tuple(nodelist)
-
-    attr_names = ()
-
-class Parameter(Node):
-    def __init__(self, keyword, default, coord=None):
-        self.keyword = keyword
+class ParameterDeclaration(Node):
+    def __init__(self, name, default, coord=None):
+        self.name = name
         self.default = default
         self.coord = coord
 
     def children(self):
         nodelist = []
-        if self.keyword is not None: nodelist.append(("keyword", self.keyword))
+        if self.name is not None: nodelist.append(("name", self.name))
         if self.default is not None: nodelist.append(("default", self.default))
         return tuple(nodelist)
 
     attr_names = ()
 
-class ParameterId(Node):
+class ParameterIdentifier(Node):
     def __init__(self, name, params, coord=None):
         self.name = name
         self.params = params
@@ -207,72 +193,106 @@ class ParameterId(Node):
 
     def children(self):
         nodelist = []
-        return tuple(nodelist)
-
-    attr_names = ('name','params',)
-
-class Raw(Node):
-    def __init__(self, input, coord=None):
-        self.input = input
-        self.coord = coord
-
-    def children(self):
-        nodelist = []
-        return tuple(nodelist)
-
-    attr_names = ('input',)
-
-class ScopeOp(Node):
-    def __init__(self, outer, inner, coord=None):
-        self.outer = outer
-        self.inner = inner
-        self.coord = coord
-
-    def children(self):
-        nodelist = []
-        if self.outer is not None: nodelist.append(("outer", self.outer))
-        if self.inner is not None: nodelist.append(("inner", self.inner))
+        if self.name is not None: nodelist.append(("name", self.name))
+        for i, child in enumerate(self.params or []):
+            nodelist.append(("params[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
 
-class CallOp(Node):
-    def __init__(self, name, args, coord=None):
-        self.name = name
+class CompoundStatement(Node):
+    def __init__(self, stmnts, coord=None):
+        self.stmnts = stmnts
+        self.coord = coord
+
+    def children(self):
+        nodelist = []
+        for i, child in enumerate(self.stmnts or []):
+            nodelist.append(("stmnts[%d]" % i, child))
+        return tuple(nodelist)
+
+    attr_names = ()
+
+class NestStatement(Node):
+    def __init__(self, refs, args, coord=None):
+        self.refs = refs
         self.args = args
         self.coord = coord
 
     def children(self):
         nodelist = []
-        if self.name is not None: nodelist.append(("name", self.name))
+        for i, child in enumerate(self.refs or []):
+            nodelist.append(("refs[%d]" % i, child))
         for i, child in enumerate(self.args or []):
             nodelist.append(("args[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
 
-class Argument(Node):
-    def __init__(self, value, keyword, coord=None):
-        self.value = value
-        self.keyword = keyword
+class ImportStatement(Node):
+    def __init__(self, refs, args, coord=None):
+        self.refs = refs
+        self.args = args
         self.coord = coord
 
     def children(self):
         nodelist = []
-        if self.value is not None: nodelist.append(("value", self.value))
-        if self.keyword is not None: nodelist.append(("keyword", self.keyword))
+        for i, child in enumerate(self.refs or []):
+            nodelist.append(("refs[%d]" % i, child))
+        for i, child in enumerate(self.args or []):
+            nodelist.append(("args[%d]" % i, child))
         return tuple(nodelist)
 
     attr_names = ()
 
-class Identifier(Node):
-    def __init__(self, name, coord=None):
+class ArgumentExpression(Node):
+    def __init__(self, name, value, coord=None):
+        self.name = name
+        self.value = value
+        self.coord = coord
+
+    def children(self):
+        nodelist = []
+        if self.name is not None: nodelist.append(("name", self.name))
+        if self.value is not None: nodelist.append(("value", self.value))
+        return tuple(nodelist)
+
+    attr_names = ()
+
+class RawExpression(Node):
+    def __init__(self, value, coord=None):
+        self.value = value
+        self.coord = coord
+
+    def children(self):
+        nodelist = []
+        return tuple(nodelist)
+
+    attr_names = ('value',)
+
+class QualifiedIdentifier(Node):
+    def __init__(self, quals, name, coord=None):
+        self.quals = quals
         self.name = name
         self.coord = coord
 
     def children(self):
         nodelist = []
+        if self.name is not None: nodelist.append(("name", self.name))
+        for i, child in enumerate(self.quals or []):
+            nodelist.append(("quals[%d]" % i, child))
         return tuple(nodelist)
 
-    attr_names = ('name',)
+    attr_names = ()
+
+class Identifier(Node):
+    def __init__(self, value, coord=None):
+        self.value = value
+        self.coord = coord
+
+    def children(self):
+        nodelist = []
+        return tuple(nodelist)
+
+    attr_names = ('value',)
 
