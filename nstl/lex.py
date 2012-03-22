@@ -40,7 +40,7 @@ class NstlLexer(object):
     ## Reserved keywords
     ##
     keywords = (
-        'tNAMESPACE', 'tTEMPLATE', 'tIMPORT',
+        'tNAMESPACE', 'tTEMPLATE', 'tIMPORT', 'tNEST', 'tWITH',
     )
     keywordMap = {keyword.lstrip('t').lower():keyword for keyword in keywords}
     
@@ -50,17 +50,13 @@ class NstlLexer(object):
     ## All the tokens recognized by the lexer
     ##
     tokens = keywords + (
-        # Identifiers
         'tID',
         
-        # Delimiters
         'tLPAREN', 'tRPAREN',
         'tLBRACE', 'tRBRACE',
-        'tMOD', 'tCOMMA',
         'tRAWBEGIN', 'tRAWEND', 'tRAWINPUT',
         
-        # Operators
-        'tPERIOD', 'tEQUALS',
+        'tCOMMA', 'tPERIOD', 'tEQUALS',
     )
     
     
@@ -90,16 +86,12 @@ class NstlLexer(object):
     ##
     t_ignore = " \t"
     
-    # Delimiters
     t_tLBRACE       = r"\{"
     t_tRBRACE       = r"\}"
     t_tLPAREN       = r"\("
     t_tRPAREN       = r"\)"
-    t_tCOMMA        = r","
-    t_tPERIOD       = r"\."
-    t_tMOD          = r"%"
     
-    # Operators
+    t_tCOMMA        = r","
     t_tPERIOD       = r"\."
     t_tEQUALS       = r"="
     
