@@ -1,15 +1,13 @@
-
-from string import Template
-
 from . import ast
+
 from string import Template
 import sys
 
 
-"""
-Note : Binary search inside directives should be implemented soon to improve
-        performance.
-"""
+
+# Note : Binary search inside directives should be implemented soon to improve
+#          performance.
+
 
 class Environment(dict):
     def update(self, *args, **kwargs):

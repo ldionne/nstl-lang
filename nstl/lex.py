@@ -1,6 +1,4 @@
-
-from . import ply
-from .ply.lex import TOKEN
+from .ply import lex
 
 
 
@@ -16,7 +14,7 @@ class NstlLexer(object):
     def build(self, **kwargs):
         """Builds the lexer from the specification.
         """
-        self.lexer = ply.lex.lex(object=self, **kwargs)
+        self.lexer = lex.lex(object=self, **kwargs)
     
     def __getattribute__(self, attr):
         get = super().__getattribute__
@@ -121,7 +119,7 @@ class NstlLexer(object):
         pass
     
     
-    @TOKEN(identifier)
+    @lex.TOKEN(identifier)
     def t_tID(self, t):
         t.type = self.keywordMap.get(t.value, t.type)
         return t

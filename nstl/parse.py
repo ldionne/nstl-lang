@@ -1,8 +1,7 @@
-
-from . import ply
-from .ply import yacc
 from . import ast
 from . import lex
+
+from .ply import yacc
 
 
 
@@ -19,7 +18,7 @@ class NstlParser(object):
 		self.lexer = lex.NstlLexer()
 		self.lexer.build(optimize=lexoptimize, lextab=lextab)
 		self.tokens = self.lexer.tokens
-		self.parser = ply.yacc.yacc(module=self, debug=yaccdebug,
+		self.parser = yacc.yacc(module=self, debug=yaccdebug,
 									optimize=yaccoptimize, tabmodule=yacctab)
 	
 	def parse(self, text, **kwargs):
