@@ -1,33 +1,40 @@
-from . import ast
+from .. import ast
 
 from string import Template
 import sys
+import os
 
 
 
-# Note : Binary search inside directives should be implemented soon to improve
-#          performance.
+def isiterable(obj):
+    return hasattr(obj, "__iter__")
+
+
+
+def iscallable(obj):
+    return hasattr(obj, "__call__")
+
 
 
 class Environment(dict):
+    """A class to facilitate instantiating string templates.
+    """
     def update(self, *args, **kwargs):
         super().update(*args, **kwargs)
         return self
     
     def __getattribute__(self, attr):
         try:
+            return self[attr]
+        except KeyError:
             return super().__getattribute__(attr)
-        except AttributeError:
-            try:
-                return self[attr]
-            except KeyError:
-                raise AttributeError
+    
     
     def __setattr__(self, attr, value):
-        if not hasattr(self, attr) and attr in self:
-            self[attr] = value
-        else:
-            super().__setattr__(attr, value)
+        self[attr] = value
+
+
+
 class StructuredEmitter(object):
     """A class to handle emitting output to a stream in a structured way.
     """
@@ -120,103 +127,21 @@ class TemplatedEmitter(StructuredEmitter):
 
 
 
-NstlDefaultEnvironment = Environment(
-    nstl_depth = 'NSTL_DEPTH',
-    nstl_unique = 'NSTL_UNIQUE',
-    nstl_depth_incr = '#include <params/depth/incr.h>',
-    nstl_depth_decr = '#include <params/depth/decr.h>',
-    maxdepth = 10,
-    maxunique = 10,
-)
-
-depth_incr = Template("""
-#if $nstl_depth == $depth
-#   if $depth == $maxdepth
-#       error "Maximum template depth reached."
-#   endif
-#   define $nstl_depth $depth_plus_1
-#endif
-""")
-
-
-depth_decr = Template("""
-#if $nstl_depth == $depth
-#   if $depth == 0
-#       error "Template depth can't be negative."
-#   endif
-#   define $nstl_depth $depth_minus_1
-#endif
-""")
-
-
-unique_incr = Template("""
-#if $nstl_unique == $unique
-#   if $unique == $maxunique
-#       error "Maximum unique template instantiations reached."
-#   endif
-#   define $nstl_unique $unique_plus_1
-#endif
-""")
-
-
-class ScopeStack(object):
-    """A class representing nested scopes.
-    """
-    def __init__(self):
-        self.scopes = [{ }]
-    
-    def enterscope(self):
-        self.scopes.append({ })
-    
-    def exitscope(self):
-        self.scopes.pop()
-    
-    def bind(self, name, object):
-        """Bind a name to an object inside the current scope.
-        """
-        self.scopes[-1][name] = object
-    
-    def resolve(self, name):
-        """Return the object binding to a name, if the name is in scope.
-        """
-        for scope in reversed(self.scopes):
-            try:
-                return scope[name]
-            except KeyError:
-                continue
-        raise NameError("name {} is not in scope".format(name))
-    
-    def inscope(self, name):
-        """Return whether a name is reachable from the current scope.
-        """
-        return any(name in scope for scope in reversed(self.scopes))
-    
-    def show(self):
-        lead = ''
-        for scope in self.scopes:
-            for name, object in scope.items():
-                print("{}{} : {}".format(lead, name, object))
-            lead = lead + ' ' * 4
-
-
-
-class Generator(ast.NodeAccumulator):
-    def __init__(self, env=NstlDefaultEnvironment):
-        self.env = env
-    
-    def visit_Template(self, node, *args, **kwargs):
-        def prepare(p):
-            if p.keyword.hasparams():
-                params = "(" + ", ".join(p.keyword.params) + ")"
-            else:
-                params = ""
-            return p.keyword.name, params, p.default
-        defaults = filter(lambda param: param.hasdefault(), node.params)
-        defaults = (prepare(param) for param in defaults)
-        all_params = (prepare(param) for param in node.params)
 class CodeEmitter(TemplatedEmitter):
-    def __init__(self, env=NstlDefaultEnvironment, *args, **kwargs):
+    defaultenv = Environment(
+        nstl_depth = 'NSTL_DEPTH',
+        nstl_unique = 'NSTL_UNIQUE',
+        nstl_depth_incr = '#include <params/depth/incr.h>',
+        nstl_depth_decr = '#include <params/depth/decr.h>',
+        nstl_unique_incr = '#include <params/unique/incr.h>',
+        maxdepth = 2,
+        maxunique = 2,
+    )
+    
+    
+    def __init__(self, env=defaultenv, *args, **kwargs):
         super().__init__(*args, env=env, **kwargs)
+    
     
     def emit(self, output, newline=True, **env):
         if isinstance(output, str):
@@ -236,80 +161,110 @@ class CodeEmitter(TemplatedEmitter):
                 "an object of {} type can not be emitted".format(type(output)))
     
     
-    def emit_template_heading(self, template, **env):
+    def emit_template_header(self, template_name, **env):
         self.emit("${nstl_unique_incr}", **env)
         self._emit_for_all_depths(
         "#define ${name}_${depth}_H 1",
-        name=template.name, **env)
+        name=template_name, **env)
     
     
-    def emit_params_initialization(self, params, **env):
-        if not params:
+    def emit_params_initialization(self, param_decls, **env):
+        if not param_decls:
             return
         
         def emit_them(**env):
             rest = [ ]
-            for param in filter(lambda p: p.hasdefault() or rest.append(p),
-                                                                       params):
-                self._emit_param_default(param, **env)
+            defaults = lambda p: p.default is not None or rest.append(p)
+            for decl in filter(defaults, param_decls):
+                self._emit_param_default(decl, **env)
             
-            for param in rest:
+            for decl in rest:
                 self.emit("""
                 #if ! defined (${param}_${unique})
                 ${indent}#error "missing argument to template parameter $param"
                 #endif
-                """, param=param.keyword.name, **env)
+                """, param=decl.name.value, **env)
         
         self._emit_for_all_uniques(emit_them, **env)
     
-    def _emit_param_default(self, param, **env):
+    
+    def _emit_param_default(self, param_decl, **env):
         """Emit the definition of a parameter with a default argument.
         """
-        kw = param.keyword
+        param_id = param_decl.name
+        macrodef = self._defmacro(param_id.value, param_id.params,
+                                                    param_decl.default.value)
         self.emit("""
         #if ! defined (${name}_${unique})
-        ${indent}""" + self._defmacro(kw.name, kw.params, param.default) + """
+        ${indent}""" + macrodef + """
         #endif
-        """, name=kw.name, **env)
+        """, name=param_id.value, **env)
     
     
-    def emit_params_cleanup(self, params, **env):
+    def emit_params_cleanup(self, param_decls, **env):
         """Emit the cleaning of parameters after a template.
         """
-        if not params:
+        if not param_decls:
             return
         
-        undefs = [self._undefmacro(param.keyword.name) for param in params]
+        undefs = [self._undefmacro(decl.name.value) for decl in param_decls]
         self._emit_for_all_uniques(undefs, **env)
     
     
-    def emit_call(self, call, **env):
-        """Emit a call to a template.
-        
-        call.path   the home path of the template
-        call.args   the arguments to the call
+    def emit_nest(self, nest_stmnt, **env):
+        """Emit the nesting of one or many templates.
         """
-        args = [self._defmacro(arg.keyword.name, arg.keyword.params, arg.value)
-                                                        for arg in call.args]
-        if args:
-            self._emit_for_all_uniques(args, **env)
+        self._emit_arguments(nest_stmnt.args)
         
-        self.emit("""
-        ${nstl_depth_incr}
-        #include <${path}>
-        ${nstl_depth_decr}
-        """, path=call.path, **env)
+        for ref in nest_stmnt.refs:
+            self.emit("""
+            ${nstl_depth_incr}
+            #include <${path}>
+            ${nstl_depth_decr}
+            """, path=ref.resolved.path, **env)
     
     
-    def emit_import(self, templates, **env):
+    def emit_import(self, import_stmnt, **env):
         """Emit the importation of one or many templates.
         """
-        for template in templates:
+        self._emit_arguments(import_stmnt.args)
+        
+        for ref in import_stmnt.refs:
             self.emit("""
             #if CONCAT(${name}, _, ${nstl_depth}, _H) != 1
             ${indent}#include <${path}>
             #endif
-            """, path=template.path, name=template.name, **env)
+            """, path=ref.resolved.path, name=ref.resolved.name.value, **env)
+    
+    
+    def emit_depth_modifier(self, incr=True, **env):
+        pick = lambda incr_, decr_: incr_ if incr else decr_
+        env.update(dict(
+            modifier_op = pick("+", "-"),
+            bound = pick("${maxdepth}", "${mindepth}"),
+            err_msg = pick("maximum", "minimum") + " template depth reached.",
+        ))
+        
+        self.emit("""
+        #if ${depth} == ${bound}
+            ${indent}#error "${err_msg}"
+        #endif
+        """, **env)
+        
+        self._emit_for_all_depths("""
+        #if ${nstl_depth} == ${depth}
+            ${indent}#define ${nstl_depth} ${depth} ${modifer_op} 1
+        #endif
+        """, **env)
+    
+    
+    def _emit_arguments(self, args, **env):
+        """Instantiate arguments before a nest or an import.
+        """
+        args = [self._defmacro(arg.name.value, arg.name.params,
+                                            arg.value.value) for arg in args]
+        if args:
+            self._emit_for_all_uniques(args, **env)
     
     
     def _defmacro(self, name, params, body):
@@ -341,37 +296,56 @@ class CodeEmitter(TemplatedEmitter):
             self.emit("#endif", **env)
 
 
+
+class Generator(ast.NodeVisitor):
+    def __init__(self):
+        self._emitter = CodeEmitter()
     
     
-    def _undef_args(self, args):
-        """args must be an iterable of argument names
-        """
-        undef_template = lambda name: "#undef {}_$unique".format(name)
-        return "\n".join(undef_template(name) for name in args)
+    def __getattribute__(self, attr):
+        # Simple call forwarding to simplify writing this class
+        get = super().__getattribute__
+        try:
+            return get(attr)
+        except AttributeError:
+            if attr.startswith("__"):
+                raise
+            return getattr(get("_emitter"), attr)
     
     
-    def _create_args(self, args):
-        action = self._define_args(args)
-        return self._substitute_with('unique', action)
+    def visit_Namespace(self, node, *args, **kwargs):
+        previous = os.getcwd()
+        os.mkdir(node.name.value)
+        os.chdir(node.name.value)
+        self.generic_visit(node, *args, **kwargs)
+        os.chdir(previous)
     
     
-    def _call_op(self, template_path, args):
-        return Template("\n".join([
-        self._create_args(args),
-        "$nstl_incr_depth",
-        "#include <$template_path>",
-        "$nstl_decr_depth"
-        ])).substitute(self.env, template_path=template_path)
+    def visit_Template(self, node, *args, **kwargs):
+        outfile = open(node.name.value + ".h", 'w')
+        self.setstream(outfile)
+        
+        self.emit_template_header(node.name.value)
+        self.emit_params_initialization(node.params)
+        
+        for stmnt in node.body.stmnts:
+            if isinstance(stmnt, ast.RawExpression):
+                self.emit_raw(stmnt.value)
+            else:
+                self.visit(stmnt, *args, **kwargs)
+        
+        self.emit_params_cleanup(node.params)
     
     
-    def _import_stmnt(self, template_name, template_path):
-        return Template("\n".join([
-        "#if ! CONCAT($name, _, $nstl_depth, _H)",
-            "#include <$path>",
-        "#endif"
-        ])).substitute(self.env, name=template_name, path=template_path)
+    def visit_ImportStatement(self, node, *args, **kwargs):
+        self.emit_import(node)
+    
+    
+    def visit_NestStatement(self, node, *args, **kwargs):
+        self.emit_nest(node)
 
 
 
 if __name__ == "__main__":
     pass
+

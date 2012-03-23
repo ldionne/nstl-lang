@@ -1,6 +1,6 @@
 
 
-__all__ = 'lex', 'parse', 'ast', 'gen', 'passes'
+__all__ = 'lex', 'parse', 'ast', 'passes'
 __version__ = '1.0'
 
 
