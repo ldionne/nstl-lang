@@ -186,19 +186,16 @@ class ParameterDeclaration(Node):
     attr_names = ()
 
 class ParameterIdentifier(Node):
-    def __init__(self, name, params, coord=None):
-        self.name = name
+    def __init__(self, value, params, coord=None):
+        self.value = value
         self.params = params
         self.coord = coord
 
     def children(self):
         nodelist = []
-        if self.name is not None: nodelist.append(("name", self.name))
-        for i, child in enumerate(self.params or []):
-            nodelist.append(("params[%d]" % i, child))
         return tuple(nodelist)
 
-    attr_names = ()
+    attr_names = ('value','params',)
 
 class CompoundStatement(Node):
     def __init__(self, stmnts, coord=None):

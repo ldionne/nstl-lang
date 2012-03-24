@@ -100,10 +100,22 @@ class NstlParser(object):
 	    p[0] = ast.ParameterDeclaration(p[1], None if len(p) == 2 else p[3])
 	
 	def p_parameter_id(self, p):
-	    """parameter-id : identifier
-	                    | identifier tLPAREN identifier-list-opt tRPAREN
+	    """parameter-id : tID
+	                    | tID tLPAREN tID-list-opt tRPAREN
 	    """
 	    p[0] = ast.ParameterIdentifier(p[1], None if len(p) == 2 else p[3])
+	
+	def p_tID_list_opt(self, p):
+	    """tID-list-opt : nothing
+	                    | tID-list
+	    """
+	    p[0] = p[1]
+	
+	def p_tID_list(self, p):
+	    """tID-list : tID
+	                | tID-list tCOMMA tID
+	    """
+	    p[0] = self.accumulate(p, skip=1)
 	
 	def p_compound_statement(self, p):
 	    """compound-statement : tLBRACE statement-seq-opt tRBRACE
@@ -227,18 +239,6 @@ class NstlParser(object):
 	    """identifier : tID
 	    """
 	    p[0] = ast.Identifier(p[1])
-	
-	def p_identifier_list_opt(self, p):
-	    """identifier-list-opt : nothing
-	                           | identifier-list
-	    """
-	    p[0] = p[1] or [ ]
-	
-	def p_identifier_list(self, p):
-	    """identifier-list : identifier
-	                       | identifier-list tCOMMA identifier
-	    """
-	    p[0] = self.accumulate(p, skip=1)
 	
 	def p_nothing(self, p):
 	    """nothing : 
