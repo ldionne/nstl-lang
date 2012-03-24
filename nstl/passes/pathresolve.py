@@ -63,12 +63,12 @@ class Backtrack(Path):
 
 class PathBuilder(ast.NodeVisitor):
     def visit_Namespace(self, node, parent=None):
-        node.name.path = Path(node.name.value, parent)
-        self.generic_visit(node, node.name.path)
+        node.path = Path(node.name.value, parent)
+        self.generic_visit(node, node.path)
     
     
     def visit_Template(self, node, parent=None):
-        node.name.path = Path(node.name.value, parent)
+        node.path = Path(node.name.value, parent)
         self.generic_visit(node, parent)
 
 
