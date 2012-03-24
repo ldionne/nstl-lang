@@ -313,16 +313,20 @@ class Generator(ast.NodeVisitor):
             return getattr(get("_emitter"), attr)
     
     
-    def visit_Namespace(self, node, *args, **kwargs):
+    def visit_Namespace(self, node, overwrite=False):
         previous = os.getcwd()
-        os.mkdir(node.name.value)
+        if not os.path.exists(node.name.value):
+            os.mkdir(node.name.value)
         os.chdir(node.name.value)
-        self.generic_visit(node, *args, **kwargs)
+        self.generic_visit(node, overwrite)
         os.chdir(previous)
     
     
-    def visit_Template(self, node, *args, **kwargs):
-        outfile = open(node.name.value + ".h", 'w')
+    def visit_Template(self, node, overwrite=False):
+        filename = node.name.value + ".h"
+        if not overwrite and os.path.exists(filename):
+            raise IOError("can't overwrite the contents of " + filename)
+        outfile = open(filename, 'w')
         self.setstream(outfile)
         
         self.emit_template_header(node.name.value)
@@ -332,7 +336,7 @@ class Generator(ast.NodeVisitor):
             if isinstance(stmnt, ast.RawExpression):
                 self.emit_raw(stmnt.value)
             else:
-                self.visit(stmnt, *args, **kwargs)
+                self.visit(stmnt, overwrite)
         
         self.emit_params_cleanup(node.params)
     
