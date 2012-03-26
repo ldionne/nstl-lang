@@ -139,19 +139,49 @@ class TemplatedEmitter(StructuredEmitter):
 
 fmt_arg_list = lambda a: "(" + ", ".join(a) + ")" if a is not None else ""
 
+
+#   List of placeholders used in the templates below.
+# max_depth           The maximum depth.
+# max_package         The maximum number of packages.
+# depth_incr          A procedure to increment the depth.
+# depth_decr          A procedure to decrement the depth.
+# get_package         The name of a macro that must expand to the current
+#                       package number when preprocessed.
+# get_depth           The name of a macro that must expand to the current
+#                       depth when preprocessed.
+# 
+# template_name       The name of the template.
+# template_names      A list of the names of the templates.
+# 
+# param_macro_names   A list of the names of the template's parameters.
+# param_macro_params  A list of the parameters of the template's parameters,
+#                         or None for a macro without parentheses.
+# param_defaults      A list of the default definition of the template's
+#                       parameters. In case there is no default, use None.
+# 
+# arg_values          A list of the value of each argument.
+# arg_macro_names     A list of the names of the arguments.
+# arg_macro_params    A list of the parameters of the arguments, or None for
+#                         a macro without parentheses.
+# 
+# content_file        The path to the template's content file.
+# content_files       A list of the path to each template's content file.
+# body_file           The path to the file containing the body of the
+#                         template.
+
+
+
+
 def emit_packagefile(emitter, env):
     """Generate a package file from the information contained in the given
     environment. The following information is required in the environment :
     
-    param_macro_names   A list of the names of the template's parameters.
-    param_macro_params  A list of the parameters of the template's parameters,
-                            or None for a macro without parentheses.
-    get_package         The name of a macro that must expand to the current
-                            package number when preprocessed.
-    content_file        The path to the file containing the contents of the
-                            template.
-    max_package         The maximum number of packages.
-    max_depth           The maximum depth.
+    param_macro_names
+    param_macro_params
+    get_package
+    content_file
+    max_package
+    max_depth
     """
     oldenv = env
     env = env.copy()
@@ -206,20 +236,15 @@ def emit_contentfile(emitter, env):
     """Generate a content file from the information contained in the given
     environment. The following information is required in the environment :
     
-    param_macro_names   A list of the names of the template's parameters.
-    param_macro_params  A list of the parameters of the template's parameters,
-                            or None for a macro without parentheses.
-    param_defaults      A list of the default definition of the template's
-                            parameters. In case there is no default, use None.
-    get_package         The name of a macro that must expand to the current
-                            package number when preprocessed.
-    get_depth           The name of a macro that must expand to the current
-                            depth when preprocessed.
-    template_name       The name of the template.
-    body_file           The path to the file containing the body of the
-                            template.
-    max_depth           The maximum depth.
-    max_package         The maxmum number of packages.
+    param_macro_names
+    param_macro_params
+    param_defaults
+    get_package
+    get_depth
+    template_name
+    body_file
+    max_depth
+    max_package
     """
     oldenv = env
     env = env.copy()
@@ -309,14 +334,10 @@ def emit_import(emitter, env):
     """Generate the importation of a list of templates.
     The following information is required inside the environment :
     
-    get_depth           The maximum depth.
-    get_package         The maximum number of packages.
-    content_files       A list of the path to each template's content file.
-    template_names      A list of the names of the templates.
-    ~arg_macro_names     A list of the names of the arguments.
-    ~arg_macro_params    A list of the parameters of the arguments, or None for
-                            a macro without parentheses.
-    ~arg_values          A list of the value of each argument.
+    get_depth
+    get_package
+    content_files
+    template_names
     """
     oldenv = env
     env = env.copy()
@@ -335,16 +356,15 @@ def emit_import(emitter, env):
 def emit_nest(emitter, env):
     """Generate the nesting of a template.
     
-    get_depth           The maximum depth.
-    get_package         The maximum number of packages.
-    content_file        The path to the template's content file.
-    template_name       The name of the template.
-    arg_macro_names     A list of the names of the arguments.
-    arg_macro_params    A list of the parameters of the arguments, or None for
-                            a macro without parentheses.
-    arg_values          A list of the value of each argument.
-    depth_incr          A procedure to increment the depth.
-    depth_decr          A procedure to decrement the depth.
+    get_depth
+    get_package
+    content_file
+    template_name
+    arg_macro_names
+    arg_macro_params
+    arg_values
+    depth_incr
+    depth_decr
     """
     oldenv = env
     env = env.copy()
