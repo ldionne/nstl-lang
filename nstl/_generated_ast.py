@@ -211,15 +211,14 @@ class CompoundStatement(Node):
     attr_names = ()
 
 class NestStatement(Node):
-    def __init__(self, refs, args, coord=None):
-        self.refs = refs
+    def __init__(self, ref, args, coord=None):
+        self.ref = ref
         self.args = args
         self.coord = coord
 
     def children(self):
         nodelist = []
-        for i, child in enumerate(self.refs or []):
-            nodelist.append(("refs[%d]" % i, child))
+        if self.ref is not None: nodelist.append(("ref", self.ref))
         for i, child in enumerate(self.args or []):
             nodelist.append(("args[%d]" % i, child))
         return tuple(nodelist)

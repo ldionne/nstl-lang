@@ -142,7 +142,7 @@ class NstlParser(object):
 	    p[0] = p[1]
 	
 	def p_nest_statement(self, p):
-	    """nest-statement : tNEST id-expression-list with-clause-opt
+	    """nest-statement : tNEST id-expression with-clause-opt
 	    """
 	    p[0] = ast.NestStatement(p[2], p[3])
 	

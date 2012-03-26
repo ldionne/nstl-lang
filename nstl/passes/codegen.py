@@ -390,7 +390,7 @@ def emit_nest(emitter, env):
     
     emitter.emit("""
     ${depth_incr}
-    #include ${content_file}
+    #include "${content_file}"
     ${depth_decr}
     """)
     
@@ -461,7 +461,7 @@ class _AstPreparator(ast.NodeVisitor):
         # NestStatement :
         #   .template   -> Template
         _AstPreparator._transform_args(n.args)
-        n.template = n.refs[0].resolved
+        n.template = n.ref.resolved
 
 
 
@@ -548,7 +548,6 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
     
     
     def visit_NestStatement(self, nest):
-        return
         env = self.env.copy()
         env.update(dict(
             content_file = nest.template.content_file,
