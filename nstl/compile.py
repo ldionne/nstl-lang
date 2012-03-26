@@ -36,8 +36,8 @@ class Compiler(object):
         pathbuild = pathresolve.PathBuilder()
         pathbuild.visit(ast)
         
-        generator = codegen.Generator()
-        generator.visit(ast, args.f)
+        generator = codegen.Generator(args.f)
+        generator.visit(ast)
 
 
 
