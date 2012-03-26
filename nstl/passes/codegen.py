@@ -419,69 +419,94 @@ def emit_nest(emitter, env):
 
 
 
-class _AstPreparator(ast.NodeVisitor):
-    def visit_Template(self, t):
+class _AstPreparator(ast.NodeTransformer):
+    def visit_Template(self, template):
         # Template :
-        #   .name   -> string
-        #   .path   -> string
-        #   .content_file   -> string
-        #   .package_file   -> string
-        #   .body_file      -> string
-        #   .body   -> list<statement>
-        #   .params**:
-        #       .name   -> string
-        #       .params -> list<string>
-        #       .default-> string
-        t.name = t.name.value
-        t.path = str(t.path)
-        t.content_file = t.name + ".contents"
-        t.body_file = t.name + ".body"
-        t.package_file = t.name + ".h"
-        t.body = t.body.stmnts
+        #  [name            -> string,
+        #   path            -> string,
+        #   content_file    -> string,
+        #   package_file    -> string,
+        #   body_file       -> string,
+        #   body**          -> Import|Nest|(RawExpression   -> string),
+        #   params**        -> ParameterDeclaration]
+        @ast.EzNode(children=('params', 'body'))
+        class Template(object):
+            pass
         
-        for param in t.params:
-            param.params = param.name.params
-            param.name = param.name.value
-            param.default = param.default and param.default.value
-        
-        for stmnt in t.body:
-            self.visit(stmnt)
+        name = template.name.value
+        return Template(name=name,
+                        path=str(template.path),
+                        content_file=name + ".contents",
+                        body_file=name + ".body",
+                        package_file=name + ".h",
+                        body=self.visit(template.body.stmnts),
+                        params=self.visit(template.params))
     
     
-    def visit_Namespace(self, n):
+    def visit_ParameterDeclaration(self, decl):
+        # ParameterDeclaration :
+        #   [name       -> string,
+        #    params     -> list<string>,
+        #    default    -> string]
+        @ast.EzNode(attrs=('params', 'name', 'default'))
+        class ParameterDeclaration(object):
+            pass
+        
+        return ParameterDeclaration(name=decl.name.value,
+                                    params=decl.name.params,
+                                    default=decl.default and decl.default.value)
+    
+    
+    def visit_Namespace(self, namespace):
         # Namespace :
-        #   .name   -> string
-        #   .decls  -- list<declaration>
-        #   .path   -> string
-        n.name = n.name.value
-        n.path = str(n.path)
-        for decl in n.decls:
-            self.visit(decl)
+        #   [name       -> string,
+        #    path       -> string,
+        #    decls**    -> Template|Namespace]
+        @ast.EzNode(attrs=('name', 'path'))
+        class Namespace(object):
+            pass
+        
+        return Namespace(name=namespace.name.value,
+                            path=str(namespace.path),
+                            decls=self.visit(namespace.decls))
     
     
-    def _transform_args(args):
-        #   .args**:
-        #       .name   -> string
-        #       .params -> list<string>
-        #       .value  -> string
-        for arg in args:
-            arg.params = arg.name.params
-            arg.name = arg.name.value
-            arg.value = arg.value.value
+    def visit_ArgumentExpression(self, expr):
+        # ArgumentExpression :
+        #   [name   -> string,
+        #    params -> list<string>,
+        #    value  -> string]
+        @ast.EzNode(attrs=('name', 'params', 'values'))
+        class ArgumentExpression(object):
+            pass
+        
+        return ArgumentExpression(name=expr.name.value,
+                                    params=expr.name.params,
+                                    value=expr.value.value)
     
     
-    def visit_ImportStatement(self, i):
+    def visit_ImportStatement(self, impt):
         # ImportStatement :
-        #   .templates  -> list<Template>
-        _AstPreparator._transform_args(i.args)
-        i.templates = [ref.resolved for ref in i.refs]
+        #   [args**         -> ArgumentExpression,
+        #    templates**    -> Template]
+        @ast.EzNode(children=('args', 'templates'))
+        class ImportStatement(object):
+            pass
+        
+        return ImportStatement(args=self.visit(impt.args),
+        templates=ast.Nodelist(self.visit(ref.resolved) for ref in impt.refs))
     
     
-    def visit_NestStatement(self, n):
+    def visit_NestStatement(self, nest):
         # NestStatement :
-        #   .template   -> Template
-        _AstPreparator._transform_args(n.args)
-        n.template = n.ref.resolved
+        #   [args**     -> ArgumentExpression,
+        #    template*  -> Template]
+        @ast.EzNode(children=('args', 'template'))
+        class NestStatement(object):
+            pass
+        
+        return NestStatement(args=self.visit(nest.args),
+                             template=self.visit(nest.ref.resolved))
 
 
 
@@ -519,7 +544,7 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
     
     
     def visit_Program(self, root):
-        _AstPreparator().visit(root)
+        root = _AstPreparator().visit(root)
         self.generic_visit(root)
     
     
