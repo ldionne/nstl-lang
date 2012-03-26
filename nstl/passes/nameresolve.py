@@ -70,20 +70,21 @@ class Scope(dict):
 class NameResolver(ast.NodeVisitor):
     def visit_Namespace(self, node, current_scope=Scope()):
         current_scope[node.name.value] = node
-        node.scope = Scope(current_scope, node.name.value)
-        self.generic_visit(node, node.scope)
+        node.addattr("scope", Scope(current_scope, node.name.value))
+        return self.generic_visit(node, node.scope)
     
     
     def visit_Template(self, node, current_scope=Scope()):
         current_scope[node.name.value] = node
-        node.scope = Scope(current_scope)
-        self.generic_visit(node, node.scope)
+        node.addattr("scope", Scope(current_scope))
+        return self.generic_visit(node, node.scope)
     
     
     def visit_Identifier(self, node, current_scope):
         if node.value not in current_scope:
             raise NameError("unresolved reference {}".format(node.value))
-        node.resolved = current_scope[node.value]
+        node.addattr("resolved", current_scope[node.value])
+        return node
     
     
     def visit_QualifiedIdentifier(self, node, current_scope):
@@ -93,5 +94,6 @@ class NameResolver(ast.NodeVisitor):
             scope = getattr(scope, qual.value)
         
         self.visit(node.name, scope)
-        node.resolved = node.name.resolved
+        node.addattr("resolved", node.name.resolved)
+        return node
 

@@ -222,7 +222,7 @@ class NstlParser(object):
 	def p_qualified_id(self, p):
 	    """qualified-id : nested-name-specifier tPERIOD unqualified-id
 	    """
-	    p[0] = ast.QualifiedIdentifier(reversed(p[1]), p[3])
+	    p[0] = ast.QualifiedIdentifier(list(reversed(p[1])), p[3])
 	
 	def p_nested_name_specifier(self, p):
 	    """nested-name-specifier : namespace-name
