@@ -137,297 +137,15 @@ class TemplatedEmitter(StructuredEmitter):
 
 
 
-fmt_arg_list = lambda a: "(" + ", ".join(a) + ")" if a is not None else ""
-
-
-#   List of placeholders used in the templates below.
-# max_depth           The maximum depth.
-# max_package         The maximum number of packages.
-# depth_incr          A procedure to increment the depth.
-# depth_decr          A procedure to decrement the depth.
-# get_package         The name of a macro that must expand to the current
-#                       package number when preprocessed.
-# get_depth           The name of a macro that must expand to the current
-#                       depth when preprocessed.
-# 
-# template_name       The name of the template.
-# template_names      A list of the names of the templates.
-# 
-# param_macro_names   A list of the names of the template's parameters.
-# param_macro_params  A list of the parameters of the template's parameters,
-#                         or None for a macro without parentheses.
-# param_defaults      A list of the default definition of the template's
-#                       parameters. In case there is no default, use None.
-# 
-# arg_values          A list of the value of each argument.
-# arg_macro_names     A list of the names of the arguments.
-# arg_macro_params    A list of the parameters of the arguments, or None for
-#                         a macro without parentheses.
-# 
-# content_file        The path to the template's content file.
-# content_files       A list of the path to each template's content file.
-# body_file           The path to the file containing the body of the
-#                         template.
-
-
-
-
-def emit_packagefile(emitter, env):
-    """Generate a package file from the information contained in the given
-    environment. The following information is required in the environment :
-    
-    param_macro_names
-    param_macro_params
-    get_package
-    content_file
-    max_package
-    max_depth
-    """
-    oldenv = env
-    env = env.copy()
-    emitter.setenv(env)
-    
-    macro_names = env['param_macro_names']
-    macro_params = [fmt_arg_list(macro_params)
-                                for macro_params in env['param_macro_params']]
-    
-    for package in range(env['max_package']):
-        env['package'] = package
-        env['depth'] = 0
-        
-        emitter.emit("""
-        #if ${get_package} == ${package}
-        """)
-        emitter.indent()
-        
-        # Argument reception from the clients
-        #   ex : #define ValueType_0_0 ValueType
-        for name, params in zip(macro_names, macro_params):
-            emitter.emit("""
-            #define ${name}_${package}_${depth}${params} ${name}
-            """, name=name, params=params)
-        
-        
-        emitter.emit("""
-        #include "${content_file}"
-        """)
-        
-        
-        # Argument cleanup
-        #   ex : #undef ValueType_0_0
-        #        #undef ValueType
-        for name in macro_names:
-            emitter.emit("""
-            #undef ${name}_${package}_${depth}
-            #undef ${name}
-            """, name=name)
-        
-        
-        emitter.dedent()
-        emitter.emit("""
-        #endif
-        """)
-    
-    emitter.setenv(oldenv)
-
-
-
-def emit_contentfile(emitter, env):
-    """Generate a content file from the information contained in the given
-    environment. The following information is required in the environment :
-    
-    param_macro_names
-    param_macro_params
-    param_defaults
-    get_package
-    get_depth
-    template_name
-    body_file
-    max_depth
-    max_package
-    """
-    oldenv = env
-    env = env.copy()
-    emitter.setenv(env)
-    
-    macro_names = env['param_macro_names']
-    macro_params = [fmt_arg_list(macro_params)
-                                for macro_params in env['param_macro_params']]
-    defaults = env['param_defaults']
-    
-    for package in range(env['max_package']):
-        env['package'] = package
-    
-        emitter.emit("""
-        #if ${get_package} == ${package}
-        """)
-        emitter.indent()
-    
-    
-        for depth in range(env['max_depth']):
-            env['depth'] = depth
-            emitter.emit("""
-            #if ${get_depth} == ${depth}
-            """)
-            emitter.indent()
-        
-            # Signalize that this template was instantiated
-            emitter.emit("""
-            #define ${template_name}_${package}_${depth}_H 1
-            """)
-        
-        
-            # Argument reception
-            for name, params, default in zip(macro_names, macro_params, defaults):
-                mangled_name = "_".join(map(str, [name, package, depth]))
-            
-                # Make sure all arguments without default were passed
-                if default is None:
-                    emitter.emit("""
-                    #if ! defined(${name})
-                    ${indent}#error "missing argument to template parameter ${name}"
-                    #endif
-                    """, name=mangled_name)
-            
-                # Or use default argument
-                else:
-                    emitter.emit("""
-                    #if ! defined(${name})
-                    ${indent}#define ${name}${params} ${default}
-                    #endif
-                    """, name=mangled_name, params=params, default=default)
-            
-            
-            # This is only included as a separate file in order to save lines.
-            emitter.emit("""
-            #include "${body_file}"
-            """)
-            
-            
-            
-            # Argument cleanup
-            for name in macro_names:
-                mangled_name = "_".join(map(str, [name, package, depth]))
-            
-                emitter.emit("""
-                #undef ${name}
-                """, name=mangled_name)
-        
-        
-        
-            emitter.dedent()
-            emitter.emit("""
-            #endif
-            """)
-    
-    
-        emitter.dedent()
-        emitter.emit("""
-        #endif
-        """)
-    
-    emitter.setenv(oldenv)
-
-
-
-def emit_import(emitter, env):
-    """Generate the importation of a list of templates.
-    The following information is required inside the environment :
-    
-    get_depth
-    get_package
-    content_files
-    template_names
-    """
-    oldenv = env
-    env = env.copy()
-    emitter.setenv(env)
-    
-    for name, file in zip(env['template_names'], env['content_files']):
-        emitter.emit("""
-        #if CONCAT(${template_name}_, ${get_package}, _, ${get_depth}, _H) != 1
-        ${indent}#include "${content_file}"
-        #endif
-        """, template_name=name, content_file=file)
-    
-    emitter.setenv(oldenv)
-
-
-def emit_nest(emitter, env):
-    """Generate the nesting of a template.
-    
-    get_depth
-    get_package
-    content_file
-    template_name
-    arg_macro_names
-    arg_macro_params
-    arg_values
-    depth_incr
-    depth_decr
-    """
-    oldenv = env
-    env = env.copy()
-    emitter.setenv(env)
-    
-    for package in range(env['max_package']):
-        env['package'] = package
-        
-        emitter.emit("""
-        #if ${get_package} == ${package}
-        """)
-        emitter.indent()
-        
-        
-        for depth in range(env['max_depth']):
-            env['depth'] = depth
-            
-            emitter.emit("""
-            #if ${get_depth} == ${depth}
-            """)
-            emitter.indent()
-            
-            
-            for name, params, value in zip(env['arg_macro_names'],
-                                    env['arg_macro_params'], env['arg_values']):
-                params = fmt_arg_list(params)
-                emitter.emit("""
-                #define ${name}_${package}_${depth}${params} ${value}
-                """, name=name, params=params, value=value)
-            
-            
-            emitter.dedent()
-            emitter.emit("""
-            #endif
-            """)
-        
-        
-        emitter.dedent()
-        emitter.emit("""
-        #endif
-        """)
-    
-    
-    emitter.emit("""
-    ${depth_incr}
-    #include "${content_file}"
-    ${depth_decr}
-    """)
-    
-    
-    emitter.setenv(oldenv)
-
-
-
 class _AstPreparator(ast.NodeTransformer):
     def visit_Template(self, template):
         # Template :
-        #  [name            -> string,
-        #   path            -> string,
-        #   content_file    -> string,
-        #   package_file    -> string,
-        #   body_file       -> string,
-        #   body**          -> Import|Nest|(RawExpression   -> string),
+        #  [name            -> string
+        #   path            -> string
+        #   content_file    -> string  (path to the non-top level include file)
+        #   package_file    -> string  (path to the top level include file)
+        #   body_file       -> string  (path to the body of the template)
+        #   body**          -> Import|Nest|(RawExpression   -> string)
         #   params**        -> ParameterDeclaration]
         @ast.EzNode(children=('params', 'body'))
         class Template(object):
@@ -445,8 +163,8 @@ class _AstPreparator(ast.NodeTransformer):
     
     def visit_ParameterDeclaration(self, decl):
         # ParameterDeclaration :
-        #   [name       -> string,
-        #    params     -> list<string>,
+        #   [name       -> string
+        #    params     -> list<string> or None
         #    default    -> string]
         @ast.EzNode(attrs=('params', 'name', 'default'))
         class ParameterDeclaration(object):
@@ -454,13 +172,13 @@ class _AstPreparator(ast.NodeTransformer):
         
         return ParameterDeclaration(name=decl.name.value,
                                     params=decl.name.params,
-                                    default=decl.default and decl.default.value)
+                                default=decl.default and decl.default.value)
     
     
     def visit_Namespace(self, namespace):
         # Namespace :
-        #   [name       -> string,
-        #    path       -> string,
+        #   [name       -> string
+        #    path       -> string
         #    decls**    -> Template|Namespace]
         @ast.EzNode(attrs=('name', 'path'))
         class Namespace(object):
@@ -473,8 +191,8 @@ class _AstPreparator(ast.NodeTransformer):
     
     def visit_ArgumentExpression(self, expr):
         # ArgumentExpression :
-        #   [name   -> string,
-        #    params -> list<string>,
+        #   [name   -> string
+        #    params -> list<string> or None
         #    value  -> string]
         @ast.EzNode(attrs=('name', 'params', 'values'))
         class ArgumentExpression(object):
@@ -487,7 +205,7 @@ class _AstPreparator(ast.NodeTransformer):
     
     def visit_ImportStatement(self, impt):
         # ImportStatement :
-        #   [args**         -> ArgumentExpression,
+        #   [args**         -> ArgumentExpression
         #    templates**    -> Template]
         @ast.EzNode(children=('args', 'templates'))
         class ImportStatement(object):
@@ -499,7 +217,7 @@ class _AstPreparator(ast.NodeTransformer):
     
     def visit_NestStatement(self, nest):
         # NestStatement :
-        #   [args**     -> ArgumentExpression,
+        #   [args**     -> ArgumentExpression
         #    template*  -> Template]
         @ast.EzNode(children=('args', 'template'))
         class NestStatement(object):
@@ -516,11 +234,21 @@ NstlDefaultEnv = Environment(
         depth_incr = '#include <params/depth/incr.h>',
         depth_decr = '#include <params/depth/decr.h>',
         package_incr = '#include <params/package/incr.h>',
-        max_depth = 2,
-        max_package = 5,
+        max_depth = 5,
+        max_package = 1000,
     )
 
+#   List of placeholders used in the templates below.
+# max_depth           The maximum depth.
+# max_package         The maximum number of packages.
+# depth_incr          A procedure to increment the depth.
+# depth_decr          A procedure to decrement the depth.
+# get_package         The name of a macro that must expand to the current
+#                       package number when preprocessed.
+# get_depth           The name of a macro that must expand to the current
+#                       depth when preprocessed.
 
+fmt_arg_list = lambda a: "(" + ", ".join(a) + ")" if a is not None else ""
 
 class Generator(ast.NodeVisitor, TemplatedEmitter):
     def __init__(self, overwrite=False, env=NstlDefaultEnv, *args, **kwargs):
@@ -559,21 +287,11 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
     
     
     def visit_Template(self, template):
-        env = self.env.copy()
-        env.update(dict(
-            content_file = template.content_file,
-            body_file = template.body_file,
-            template_name = template.name,
-            param_macro_names = [param.name for param in template.params],
-            param_macro_params = [param.params for param in template.params],
-            param_defaults = [param.default for param in template.params],
-        ))
-        
         self.setstream(template.package_file)
-        emit_packagefile(self, env)
+        self._emit_packagefile(template)
         
         self.setstream(template.content_file)
-        emit_contentfile(self, env)
+        self._emit_contentfile(template)
         
         self.setstream(template.body_file)
         for stmnt in template.body:
@@ -583,28 +301,218 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
                 self.visit(stmnt)
     
     
+    def _emit_packagefile(self, template):
+        """Generate a package file from the information contained in the given
+        environment. The following information must be provided by the environment:
+        
+        get_package
+        max_package
+        max_depth
+        """
+        oldenv = self.env
+        self.env = self.env.copy()
+        
+        for package in range(self.env['max_package']):
+            self.env['package'] = package
+            self.env['depth'] = 0
+
+            self.emit("""
+            #if ${get_package} == ${package}
+            """)
+            self.indent()
+            
+            # Argument reception from the clients
+            #   ex : #define ValueType_0_0 ValueType
+            for param in template.params:
+                self.emit("""
+                #define ${name}_${package}_${depth}${params} ${name}
+                """, name=param.name, params=fmt_arg_list(param.params))
+            
+            
+            self.emit("""
+            #include "${file}"
+            """, file=template.content_file)
+            
+            
+            # Argument cleanup
+            #   ex : #undef ValueType_0_0
+            #        #undef ValueType
+            for param in template.params:
+                self.emit("""
+                #undef ${name}_${package}_${depth}
+                #undef ${name}
+                """, name=param.name)
+            
+            
+            self.dedent()
+            self.emit("""
+            #endif
+            """)
+        
+        self.setenv(oldenv)
+    
+    
+    def _emit_contentfile(self, template):
+        """Generate a content file from the information contained in the given
+        environment. The following information must be provided by the environment:
+        
+        get_package
+        get_depth
+        max_depth
+        max_package
+        """
+        oldenv = self.env
+        self.env = self.env.copy()
+        
+        for package in range(self.env['max_package']):
+            self.env['package'] = package
+            
+            self.emit("""
+            #if ${get_package} == ${package}
+            """)
+            self.indent()
+            
+            
+            for depth in range(self.env['max_depth']):
+                self.env['depth'] = depth
+                self.emit("""
+                #if ${get_depth} == ${depth}
+                """)
+                self.indent()
+                
+                # Signalize that this template was instantiated
+                self.emit("""
+                #define ${name}_${package}_${depth}_H 1
+                """, name=template.name)
+                
+                
+                # Argument reception
+                for param in template.params:
+                    mangled_name = "_".join(map(str, [param.name, package, depth]))
+                    
+                    # Make sure all arguments without default were passed
+                    if param.default is None:
+                        self.emit("""
+                        #if ! defined(${name})
+                        ${indent}#error "missing argument to template parameter ${name}"
+                        #endif
+                        """, name=mangled_name)
+                    
+                    # Or use default argument
+                    else:
+                        self.emit("""
+                        #if ! defined(${name})
+                        ${indent}#define ${name}${params} ${default}
+                        #endif
+                        """, name=mangled_name, params=fmt_arg_list(param.params),
+                                                            default=param.default)
+                
+                
+                # This is only included as a separate file in order to save lines.
+                self.emit("""
+                #include "${file}"
+                """, file=template.body_file)
+                
+                
+                # Argument cleanup
+                for param in template.params:
+                    mangled_name = "_".join(map(str, [param.name, package, depth]))
+                    
+                    self.emit("""
+                    #undef ${name}
+                    """, name=mangled_name)
+                
+                
+                self.dedent()
+                self.emit("""
+                #endif
+                """)
+            
+            self.dedent()
+            self.emit("""
+            #endif
+            """)
+
+        self.env = oldenv
+    
+    
     def visit_ImportStatement(self, impt):
-        env = self.env.copy()
-        env.update(dict(
-            content_files = [t.content_file for t in impt.templates],
-            template_names = [t.name for t in impt.templates],
-        ))
-        emit_import(self, env)
+        """Generate the importation of a list of templates.
+        The following information must be provided by the environment :
+        
+        get_depth
+        get_package
+        """
+        oldenv = self.env
+        self.env = self.env.copy()
+        
+        for template in impt.templates:
+            self.emit("""
+            #if CONCAT(${name}_, ${get_package}, _, ${get_depth}, _H) != 1
+            ${indent}#include "${file}"
+            #endif
+            """, name=template.name, file=template.content_file)
+        
+        self.env = oldenv
     
     
     def visit_NestStatement(self, nest):
-        env = self.env.copy()
-        env.update(dict(
-            content_file = nest.template.content_file,
-            template_name = nest.template.name,
-            arg_macro_names = [arg.name for arg in nest.args],
-            arg_macro_params = [arg.params for arg in nest.args],
-            arg_values = [arg.value for arg in nest.args],
-        ))
-        emit_nest(self, env)
+        """Generate the nesting of a template.
+        The following information must be provided by the environment :
+        
+        get_depth
+        get_package
+        depth_incr
+        depth_decr
+        """
+        oldenv = self.env
+        self.env = self.env.copy()
+        
+        for package in range(self.env['max_package']):
+            self.env['package'] = package
+            
+            self.emit("""
+            #if ${get_package} == ${package}
+            """)
+            self.indent()
+            
+            
+            for depth in range(self.env['max_depth']):
+                self.env['depth'] = depth
+                
+                self.emit("""
+                #if ${get_depth} == ${depth}
+                """)
+                self.indent()
+                
+                
+                for arg in nest.args:
+                    params = fmt_arg_list(arg.params)
+                    self.emit("""
+                    #define ${name}_${package}_${depth}${params} ${value}
+                    """, name=arg.name, params=params, value=arg.value)
+
+
+                self.dedent()
+                self.emit("""
+                #endif
+                """)
+            
+            self.dedent()
+            self.emit("""
+            #endif
+            """)
+        
+        
+        self.emit("""
+        ${depth_incr}
+        #include "${file}"
+        ${depth_decr}
+        """, file=nest.template.content_file)
+
+        self.env = oldenv
 
 
 
 if __name__ == "__main__":
     pass
-
