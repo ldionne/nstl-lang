@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from distutils.core import setup
 
@@ -9,14 +9,15 @@ setup(
     url = 'https://github.com/ldionne/nstl-lang',
     author = 'Louis Dionne',
     author_email = 'louis.dionne92@gmail.com',
-    description = 
-        "nstl: A compiler for creating templates in C.",
+    description = "nstl: A compiler for creating templates in C.",
+    license = 'BSD',
+    install_requires = [
+        'ply',
+    ],
     
     classifiers = [
         "Development Status :: 3 - Alpha",
-        "Environment :: Console",
         "Intended Audience :: Developers",
-        # license ??
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Compilers",
