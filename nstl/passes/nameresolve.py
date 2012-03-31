@@ -66,17 +66,47 @@ class Scope(dict):
             lead = lead + ' ' * 4
 
 
+def unique(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if x not in seen and not seen_add(x)]
+
+
 class NameCollector(ast.NodeTransformer):
-    def visit_Namespace(self, node, current_scope=Scope()):
-        current_scope[node.name.value] = node
-        node.a.scope = Scope(current_scope, node.name.value)
-        return self.generic_visit(node, node.scope)
+    def visit_Program(self, root, current_scope=Scope()):
+        new_root = self.generic_visit(root, current_scope)
+        new_root.decls = ast.Nodelist(unique(new_root.decls))
+        return new_root
     
+    def visit_Namespace(self, node, current_scope=Scope()):
+        if node.name.value in current_scope:
+            already_there = current_scope[node.name.value]
+            current_scope = already_there.scope
+            for decl in node.decls:
+                already_there.decls.append(self.visit(decl, current_scope))
+            
+            already_there.decls = ast.Nodelist(unique(already_there.decls))
+            return already_there
+        else:
+            current_scope[node.name.value] = node
+            node.a.scope = Scope(current_scope, node.name.value)
+            return self.generic_visit(node, node.scope)
     
     def visit_Template(self, node, current_scope=Scope()):
+        if node.name.value in current_scope:
+            raise NameError("redefinition of template "+ node.name.value)
         current_scope[node.name.value] = node
         node.a.scope = Scope(current_scope)
         return self.generic_visit(node, node.scope)
+
+
+def merge_asts(*programs):
+    decls = [ ]
+    for prog in programs:
+        for decl in prog.decls:
+            decls.append(decl)
+    
+    return ast.Program(decls)
 
 
 class NameResolver(ast.NodeTransformer):
@@ -98,10 +128,10 @@ class NameResolver(ast.NodeTransformer):
         return node
     
     def visit_QualifiedIdentifier(self, node, current_scope):
-        outer, *rest = node.quals
+        outer, *rest = list(reversed(node.quals))
         scope = current_scope.get_outer_scope(outer.value)
         for qual in rest:
-            scope = getattr(scope, qual.value)
+            scope = scope[qual.value].scope
         
         self.visit(node.name, scope)
         node.a.resolved = node.name.resolved
