@@ -235,7 +235,7 @@ NstlDefaultEnv = Environment(
         depth_decr = '#include <params/depth/decr.h>',
         package_incr = '#include <params/package/incr.h>',
         max_depth = 5,
-        max_package = 1000,
+        max_package = 5,
     )
 
 #   List of placeholders used in the templates below.
