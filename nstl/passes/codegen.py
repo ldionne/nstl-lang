@@ -6,11 +6,6 @@ import os
 
 
 
-def isiterable(obj):
-    return hasattr(obj, "__iter__")
-
-
-
 def iscallable(obj):
     return hasattr(obj, "__call__")
 
@@ -298,7 +293,7 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
             if isinstance(stmnt, ast.RawExpression):
                 self.emit_raw(stmnt.value)
             else:
-                self.visit(stmnt)
+                 self.visit(stmnt)
     
     
     def _emit_packagefile(self, template):
@@ -311,6 +306,8 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
         """
         oldenv = self.env
         self.env = self.env.copy()
+        
+        self._emit_inner_params(template)
         
         for package in range(self.env['max_package']):
             self.env['package'] = package
@@ -336,10 +333,12 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
             
             # Argument cleanup
             #   ex : #undef ValueType_0_0
+            #        #undef ValueType_
             #        #undef ValueType
             for param in template.params:
                 self.emit("""
                 #undef ${name}_${package}_${depth}
+                #undef ${name}_
                 #undef ${name}
                 """, name=param.name)
             
@@ -350,6 +349,22 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
             """)
         
         self.setenv(oldenv)
+    
+    
+    def _emit_inner_params(self, template):
+        """Generate the definition of inner parameters of a template.
+        For example, a template with parameter ValueType will have an inner
+        parameter called ValueType_.
+        
+        The following information must be provided by the environment:
+        
+        get_package
+        get_depth
+        """
+        for param in template.params:
+            self.emit("""
+            #define ${name}_ CONCAT(${name}_, ${get_package}, _, ${get_depth})
+            """, name=param.name)
     
     
     def _emit_contentfile(self, template):
@@ -485,12 +500,20 @@ class Generator(ast.NodeVisitor, TemplatedEmitter):
                 """)
                 self.indent()
                 
+                # Undefine the inner parameters
+                for param in nest.template.params:
+                    self.emit("""
+                    #undef ${name}_
+                    """, name=param.name)
                 
                 for arg in nest.args:
                     params = fmt_arg_list(arg.params)
                     self.emit("""
                     #define ${name}_${package}_${depth}${params} ${value}
                     """, name=arg.name, params=params, value=arg.value)
+                
+                # Redefine the inner parameters
+                self._emit_inner_params(nest.template)
 
 
                 self.dedent()
