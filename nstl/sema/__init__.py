@@ -1,4 +1,7 @@
 
+"""
+This package contains packages that are primarily used for semantic analysis.
+"""
 
 __all__ = ['scope']
 

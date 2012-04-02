@@ -1,4 +1,7 @@
 
+"""
+This package contains various helper modules.
+"""
 
 __all__ = ['orderedset']
 
