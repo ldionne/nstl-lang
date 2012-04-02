@@ -6,6 +6,7 @@ from nstl.sema.scope import Scope
 
 class _Decl(object):
     """Mock class representing a declaration."""
+    
     pass
 
 
