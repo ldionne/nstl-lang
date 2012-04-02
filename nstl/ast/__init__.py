@@ -4,7 +4,7 @@ This package contains modules that are primarily used for abstract syntax
 tree construction and transformation.
 """
 
-__all__ = ['declbase']
+__all__ = ['decl']
 
 
 if __name__ == "__main__":
