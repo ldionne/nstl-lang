@@ -1,6 +1,6 @@
 
 
-__all__ = 'pathresolve', 'codegen', 'nameresolve'
+__all__ = ['pathresolve', 'codegen', 'nameresolve']
 
 
 if __name__ == "__main__":
