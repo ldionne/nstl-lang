@@ -1,0 +1,9 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+
+            static inline Iterator_ FuncName_(prev_n) (Iterator_ iter, size_t n)
+            {
+            	return NodeToValue_(NodePrevN(ValueToNode_(iter), n));
+            }
+        

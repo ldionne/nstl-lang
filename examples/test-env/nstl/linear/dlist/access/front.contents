@@ -1,0 +1,410 @@
+#if NSTL_PACKAGE == 0
+    #if NSTL_DEPTH == 0
+        #define front_0_0_H 1
+        #if ! defined(FuncName_0_0)
+            #error "missing argument to template parameter FuncName_0_0"
+        #endif
+        #if ! defined(Container_0_0)
+            #error "missing argument to template parameter Container_0_0"
+        #endif
+        #if ! defined(ValueType_0_0)
+            #error "missing argument to template parameter ValueType_0_0"
+        #endif
+        #include "front.body"
+        #undef FuncName_0_0
+        #undef Container_0_0
+        #undef ValueType_0_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define front_0_1_H 1
+        #if ! defined(FuncName_0_1)
+            #error "missing argument to template parameter FuncName_0_1"
+        #endif
+        #if ! defined(Container_0_1)
+            #error "missing argument to template parameter Container_0_1"
+        #endif
+        #if ! defined(ValueType_0_1)
+            #error "missing argument to template parameter ValueType_0_1"
+        #endif
+        #include "front.body"
+        #undef FuncName_0_1
+        #undef Container_0_1
+        #undef ValueType_0_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define front_0_2_H 1
+        #if ! defined(FuncName_0_2)
+            #error "missing argument to template parameter FuncName_0_2"
+        #endif
+        #if ! defined(Container_0_2)
+            #error "missing argument to template parameter Container_0_2"
+        #endif
+        #if ! defined(ValueType_0_2)
+            #error "missing argument to template parameter ValueType_0_2"
+        #endif
+        #include "front.body"
+        #undef FuncName_0_2
+        #undef Container_0_2
+        #undef ValueType_0_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define front_0_3_H 1
+        #if ! defined(FuncName_0_3)
+            #error "missing argument to template parameter FuncName_0_3"
+        #endif
+        #if ! defined(Container_0_3)
+            #error "missing argument to template parameter Container_0_3"
+        #endif
+        #if ! defined(ValueType_0_3)
+            #error "missing argument to template parameter ValueType_0_3"
+        #endif
+        #include "front.body"
+        #undef FuncName_0_3
+        #undef Container_0_3
+        #undef ValueType_0_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define front_0_4_H 1
+        #if ! defined(FuncName_0_4)
+            #error "missing argument to template parameter FuncName_0_4"
+        #endif
+        #if ! defined(Container_0_4)
+            #error "missing argument to template parameter Container_0_4"
+        #endif
+        #if ! defined(ValueType_0_4)
+            #error "missing argument to template parameter ValueType_0_4"
+        #endif
+        #include "front.body"
+        #undef FuncName_0_4
+        #undef Container_0_4
+        #undef ValueType_0_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 1
+    #if NSTL_DEPTH == 0
+        #define front_1_0_H 1
+        #if ! defined(FuncName_1_0)
+            #error "missing argument to template parameter FuncName_1_0"
+        #endif
+        #if ! defined(Container_1_0)
+            #error "missing argument to template parameter Container_1_0"
+        #endif
+        #if ! defined(ValueType_1_0)
+            #error "missing argument to template parameter ValueType_1_0"
+        #endif
+        #include "front.body"
+        #undef FuncName_1_0
+        #undef Container_1_0
+        #undef ValueType_1_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define front_1_1_H 1
+        #if ! defined(FuncName_1_1)
+            #error "missing argument to template parameter FuncName_1_1"
+        #endif
+        #if ! defined(Container_1_1)
+            #error "missing argument to template parameter Container_1_1"
+        #endif
+        #if ! defined(ValueType_1_1)
+            #error "missing argument to template parameter ValueType_1_1"
+        #endif
+        #include "front.body"
+        #undef FuncName_1_1
+        #undef Container_1_1
+        #undef ValueType_1_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define front_1_2_H 1
+        #if ! defined(FuncName_1_2)
+            #error "missing argument to template parameter FuncName_1_2"
+        #endif
+        #if ! defined(Container_1_2)
+            #error "missing argument to template parameter Container_1_2"
+        #endif
+        #if ! defined(ValueType_1_2)
+            #error "missing argument to template parameter ValueType_1_2"
+        #endif
+        #include "front.body"
+        #undef FuncName_1_2
+        #undef Container_1_2
+        #undef ValueType_1_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define front_1_3_H 1
+        #if ! defined(FuncName_1_3)
+            #error "missing argument to template parameter FuncName_1_3"
+        #endif
+        #if ! defined(Container_1_3)
+            #error "missing argument to template parameter Container_1_3"
+        #endif
+        #if ! defined(ValueType_1_3)
+            #error "missing argument to template parameter ValueType_1_3"
+        #endif
+        #include "front.body"
+        #undef FuncName_1_3
+        #undef Container_1_3
+        #undef ValueType_1_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define front_1_4_H 1
+        #if ! defined(FuncName_1_4)
+            #error "missing argument to template parameter FuncName_1_4"
+        #endif
+        #if ! defined(Container_1_4)
+            #error "missing argument to template parameter Container_1_4"
+        #endif
+        #if ! defined(ValueType_1_4)
+            #error "missing argument to template parameter ValueType_1_4"
+        #endif
+        #include "front.body"
+        #undef FuncName_1_4
+        #undef Container_1_4
+        #undef ValueType_1_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 2
+    #if NSTL_DEPTH == 0
+        #define front_2_0_H 1
+        #if ! defined(FuncName_2_0)
+            #error "missing argument to template parameter FuncName_2_0"
+        #endif
+        #if ! defined(Container_2_0)
+            #error "missing argument to template parameter Container_2_0"
+        #endif
+        #if ! defined(ValueType_2_0)
+            #error "missing argument to template parameter ValueType_2_0"
+        #endif
+        #include "front.body"
+        #undef FuncName_2_0
+        #undef Container_2_0
+        #undef ValueType_2_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define front_2_1_H 1
+        #if ! defined(FuncName_2_1)
+            #error "missing argument to template parameter FuncName_2_1"
+        #endif
+        #if ! defined(Container_2_1)
+            #error "missing argument to template parameter Container_2_1"
+        #endif
+        #if ! defined(ValueType_2_1)
+            #error "missing argument to template parameter ValueType_2_1"
+        #endif
+        #include "front.body"
+        #undef FuncName_2_1
+        #undef Container_2_1
+        #undef ValueType_2_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define front_2_2_H 1
+        #if ! defined(FuncName_2_2)
+            #error "missing argument to template parameter FuncName_2_2"
+        #endif
+        #if ! defined(Container_2_2)
+            #error "missing argument to template parameter Container_2_2"
+        #endif
+        #if ! defined(ValueType_2_2)
+            #error "missing argument to template parameter ValueType_2_2"
+        #endif
+        #include "front.body"
+        #undef FuncName_2_2
+        #undef Container_2_2
+        #undef ValueType_2_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define front_2_3_H 1
+        #if ! defined(FuncName_2_3)
+            #error "missing argument to template parameter FuncName_2_3"
+        #endif
+        #if ! defined(Container_2_3)
+            #error "missing argument to template parameter Container_2_3"
+        #endif
+        #if ! defined(ValueType_2_3)
+            #error "missing argument to template parameter ValueType_2_3"
+        #endif
+        #include "front.body"
+        #undef FuncName_2_3
+        #undef Container_2_3
+        #undef ValueType_2_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define front_2_4_H 1
+        #if ! defined(FuncName_2_4)
+            #error "missing argument to template parameter FuncName_2_4"
+        #endif
+        #if ! defined(Container_2_4)
+            #error "missing argument to template parameter Container_2_4"
+        #endif
+        #if ! defined(ValueType_2_4)
+            #error "missing argument to template parameter ValueType_2_4"
+        #endif
+        #include "front.body"
+        #undef FuncName_2_4
+        #undef Container_2_4
+        #undef ValueType_2_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 3
+    #if NSTL_DEPTH == 0
+        #define front_3_0_H 1
+        #if ! defined(FuncName_3_0)
+            #error "missing argument to template parameter FuncName_3_0"
+        #endif
+        #if ! defined(Container_3_0)
+            #error "missing argument to template parameter Container_3_0"
+        #endif
+        #if ! defined(ValueType_3_0)
+            #error "missing argument to template parameter ValueType_3_0"
+        #endif
+        #include "front.body"
+        #undef FuncName_3_0
+        #undef Container_3_0
+        #undef ValueType_3_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define front_3_1_H 1
+        #if ! defined(FuncName_3_1)
+            #error "missing argument to template parameter FuncName_3_1"
+        #endif
+        #if ! defined(Container_3_1)
+            #error "missing argument to template parameter Container_3_1"
+        #endif
+        #if ! defined(ValueType_3_1)
+            #error "missing argument to template parameter ValueType_3_1"
+        #endif
+        #include "front.body"
+        #undef FuncName_3_1
+        #undef Container_3_1
+        #undef ValueType_3_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define front_3_2_H 1
+        #if ! defined(FuncName_3_2)
+            #error "missing argument to template parameter FuncName_3_2"
+        #endif
+        #if ! defined(Container_3_2)
+            #error "missing argument to template parameter Container_3_2"
+        #endif
+        #if ! defined(ValueType_3_2)
+            #error "missing argument to template parameter ValueType_3_2"
+        #endif
+        #include "front.body"
+        #undef FuncName_3_2
+        #undef Container_3_2
+        #undef ValueType_3_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define front_3_3_H 1
+        #if ! defined(FuncName_3_3)
+            #error "missing argument to template parameter FuncName_3_3"
+        #endif
+        #if ! defined(Container_3_3)
+            #error "missing argument to template parameter Container_3_3"
+        #endif
+        #if ! defined(ValueType_3_3)
+            #error "missing argument to template parameter ValueType_3_3"
+        #endif
+        #include "front.body"
+        #undef FuncName_3_3
+        #undef Container_3_3
+        #undef ValueType_3_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define front_3_4_H 1
+        #if ! defined(FuncName_3_4)
+            #error "missing argument to template parameter FuncName_3_4"
+        #endif
+        #if ! defined(Container_3_4)
+            #error "missing argument to template parameter Container_3_4"
+        #endif
+        #if ! defined(ValueType_3_4)
+            #error "missing argument to template parameter ValueType_3_4"
+        #endif
+        #include "front.body"
+        #undef FuncName_3_4
+        #undef Container_3_4
+        #undef ValueType_3_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 4
+    #if NSTL_DEPTH == 0
+        #define front_4_0_H 1
+        #if ! defined(FuncName_4_0)
+            #error "missing argument to template parameter FuncName_4_0"
+        #endif
+        #if ! defined(Container_4_0)
+            #error "missing argument to template parameter Container_4_0"
+        #endif
+        #if ! defined(ValueType_4_0)
+            #error "missing argument to template parameter ValueType_4_0"
+        #endif
+        #include "front.body"
+        #undef FuncName_4_0
+        #undef Container_4_0
+        #undef ValueType_4_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define front_4_1_H 1
+        #if ! defined(FuncName_4_1)
+            #error "missing argument to template parameter FuncName_4_1"
+        #endif
+        #if ! defined(Container_4_1)
+            #error "missing argument to template parameter Container_4_1"
+        #endif
+        #if ! defined(ValueType_4_1)
+            #error "missing argument to template parameter ValueType_4_1"
+        #endif
+        #include "front.body"
+        #undef FuncName_4_1
+        #undef Container_4_1
+        #undef ValueType_4_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define front_4_2_H 1
+        #if ! defined(FuncName_4_2)
+            #error "missing argument to template parameter FuncName_4_2"
+        #endif
+        #if ! defined(Container_4_2)
+            #error "missing argument to template parameter Container_4_2"
+        #endif
+        #if ! defined(ValueType_4_2)
+            #error "missing argument to template parameter ValueType_4_2"
+        #endif
+        #include "front.body"
+        #undef FuncName_4_2
+        #undef Container_4_2
+        #undef ValueType_4_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define front_4_3_H 1
+        #if ! defined(FuncName_4_3)
+            #error "missing argument to template parameter FuncName_4_3"
+        #endif
+        #if ! defined(Container_4_3)
+            #error "missing argument to template parameter Container_4_3"
+        #endif
+        #if ! defined(ValueType_4_3)
+            #error "missing argument to template parameter ValueType_4_3"
+        #endif
+        #include "front.body"
+        #undef FuncName_4_3
+        #undef Container_4_3
+        #undef ValueType_4_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define front_4_4_H 1
+        #if ! defined(FuncName_4_4)
+            #error "missing argument to template parameter FuncName_4_4"
+        #endif
+        #if ! defined(Container_4_4)
+            #error "missing argument to template parameter Container_4_4"
+        #endif
+        #if ! defined(ValueType_4_4)
+            #error "missing argument to template parameter ValueType_4_4"
+        #endif
+        #include "front.body"
+        #undef FuncName_4_4
+        #undef Container_4_4
+        #undef ValueType_4_4
+    #endif
+#endif

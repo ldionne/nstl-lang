@@ -1,0 +1,12 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+#if CONCAT(next_n_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "next_n.contents"
+#endif
+
+            static inline Iterator_ FuncName_(advance) (Iterator_ *iter, size_t n)
+            {
+            	return *iter = FuncName_(next_n)(*iter, n);
+            }
+        

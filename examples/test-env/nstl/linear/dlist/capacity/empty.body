@@ -1,0 +1,13 @@
+#if CONCAT(begin_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "begin.contents"
+#endif
+#if CONCAT(end_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "end.contents"
+#endif
+
+                #include <stdbool.h>
+                static inline bool FuncName_(isempty) (Container_ *list)
+                {
+                	return FuncName_(begin)(list) == FuncName_(end)(list);
+                }
+            

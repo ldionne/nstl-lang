@@ -1,0 +1,510 @@
+#if NSTL_PACKAGE == 0
+    #if NSTL_DEPTH == 0
+        #define prev_n_0_0_H 1
+        #if ! defined(FuncName_0_0)
+            #error "missing argument to template parameter FuncName_0_0"
+        #endif
+        #if ! defined(NodePrevN_0_0)
+            #error "missing argument to template parameter NodePrevN_0_0"
+        #endif
+        #if ! defined(NodeToValue_0_0)
+            #error "missing argument to template parameter NodeToValue_0_0"
+        #endif
+        #if ! defined(ValueToNode_0_0)
+            #error "missing argument to template parameter ValueToNode_0_0"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_0_0
+        #undef NodePrevN_0_0
+        #undef NodeToValue_0_0
+        #undef ValueToNode_0_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define prev_n_0_1_H 1
+        #if ! defined(FuncName_0_1)
+            #error "missing argument to template parameter FuncName_0_1"
+        #endif
+        #if ! defined(NodePrevN_0_1)
+            #error "missing argument to template parameter NodePrevN_0_1"
+        #endif
+        #if ! defined(NodeToValue_0_1)
+            #error "missing argument to template parameter NodeToValue_0_1"
+        #endif
+        #if ! defined(ValueToNode_0_1)
+            #error "missing argument to template parameter ValueToNode_0_1"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_0_1
+        #undef NodePrevN_0_1
+        #undef NodeToValue_0_1
+        #undef ValueToNode_0_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define prev_n_0_2_H 1
+        #if ! defined(FuncName_0_2)
+            #error "missing argument to template parameter FuncName_0_2"
+        #endif
+        #if ! defined(NodePrevN_0_2)
+            #error "missing argument to template parameter NodePrevN_0_2"
+        #endif
+        #if ! defined(NodeToValue_0_2)
+            #error "missing argument to template parameter NodeToValue_0_2"
+        #endif
+        #if ! defined(ValueToNode_0_2)
+            #error "missing argument to template parameter ValueToNode_0_2"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_0_2
+        #undef NodePrevN_0_2
+        #undef NodeToValue_0_2
+        #undef ValueToNode_0_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define prev_n_0_3_H 1
+        #if ! defined(FuncName_0_3)
+            #error "missing argument to template parameter FuncName_0_3"
+        #endif
+        #if ! defined(NodePrevN_0_3)
+            #error "missing argument to template parameter NodePrevN_0_3"
+        #endif
+        #if ! defined(NodeToValue_0_3)
+            #error "missing argument to template parameter NodeToValue_0_3"
+        #endif
+        #if ! defined(ValueToNode_0_3)
+            #error "missing argument to template parameter ValueToNode_0_3"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_0_3
+        #undef NodePrevN_0_3
+        #undef NodeToValue_0_3
+        #undef ValueToNode_0_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define prev_n_0_4_H 1
+        #if ! defined(FuncName_0_4)
+            #error "missing argument to template parameter FuncName_0_4"
+        #endif
+        #if ! defined(NodePrevN_0_4)
+            #error "missing argument to template parameter NodePrevN_0_4"
+        #endif
+        #if ! defined(NodeToValue_0_4)
+            #error "missing argument to template parameter NodeToValue_0_4"
+        #endif
+        #if ! defined(ValueToNode_0_4)
+            #error "missing argument to template parameter ValueToNode_0_4"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_0_4
+        #undef NodePrevN_0_4
+        #undef NodeToValue_0_4
+        #undef ValueToNode_0_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 1
+    #if NSTL_DEPTH == 0
+        #define prev_n_1_0_H 1
+        #if ! defined(FuncName_1_0)
+            #error "missing argument to template parameter FuncName_1_0"
+        #endif
+        #if ! defined(NodePrevN_1_0)
+            #error "missing argument to template parameter NodePrevN_1_0"
+        #endif
+        #if ! defined(NodeToValue_1_0)
+            #error "missing argument to template parameter NodeToValue_1_0"
+        #endif
+        #if ! defined(ValueToNode_1_0)
+            #error "missing argument to template parameter ValueToNode_1_0"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_1_0
+        #undef NodePrevN_1_0
+        #undef NodeToValue_1_0
+        #undef ValueToNode_1_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define prev_n_1_1_H 1
+        #if ! defined(FuncName_1_1)
+            #error "missing argument to template parameter FuncName_1_1"
+        #endif
+        #if ! defined(NodePrevN_1_1)
+            #error "missing argument to template parameter NodePrevN_1_1"
+        #endif
+        #if ! defined(NodeToValue_1_1)
+            #error "missing argument to template parameter NodeToValue_1_1"
+        #endif
+        #if ! defined(ValueToNode_1_1)
+            #error "missing argument to template parameter ValueToNode_1_1"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_1_1
+        #undef NodePrevN_1_1
+        #undef NodeToValue_1_1
+        #undef ValueToNode_1_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define prev_n_1_2_H 1
+        #if ! defined(FuncName_1_2)
+            #error "missing argument to template parameter FuncName_1_2"
+        #endif
+        #if ! defined(NodePrevN_1_2)
+            #error "missing argument to template parameter NodePrevN_1_2"
+        #endif
+        #if ! defined(NodeToValue_1_2)
+            #error "missing argument to template parameter NodeToValue_1_2"
+        #endif
+        #if ! defined(ValueToNode_1_2)
+            #error "missing argument to template parameter ValueToNode_1_2"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_1_2
+        #undef NodePrevN_1_2
+        #undef NodeToValue_1_2
+        #undef ValueToNode_1_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define prev_n_1_3_H 1
+        #if ! defined(FuncName_1_3)
+            #error "missing argument to template parameter FuncName_1_3"
+        #endif
+        #if ! defined(NodePrevN_1_3)
+            #error "missing argument to template parameter NodePrevN_1_3"
+        #endif
+        #if ! defined(NodeToValue_1_3)
+            #error "missing argument to template parameter NodeToValue_1_3"
+        #endif
+        #if ! defined(ValueToNode_1_3)
+            #error "missing argument to template parameter ValueToNode_1_3"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_1_3
+        #undef NodePrevN_1_3
+        #undef NodeToValue_1_3
+        #undef ValueToNode_1_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define prev_n_1_4_H 1
+        #if ! defined(FuncName_1_4)
+            #error "missing argument to template parameter FuncName_1_4"
+        #endif
+        #if ! defined(NodePrevN_1_4)
+            #error "missing argument to template parameter NodePrevN_1_4"
+        #endif
+        #if ! defined(NodeToValue_1_4)
+            #error "missing argument to template parameter NodeToValue_1_4"
+        #endif
+        #if ! defined(ValueToNode_1_4)
+            #error "missing argument to template parameter ValueToNode_1_4"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_1_4
+        #undef NodePrevN_1_4
+        #undef NodeToValue_1_4
+        #undef ValueToNode_1_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 2
+    #if NSTL_DEPTH == 0
+        #define prev_n_2_0_H 1
+        #if ! defined(FuncName_2_0)
+            #error "missing argument to template parameter FuncName_2_0"
+        #endif
+        #if ! defined(NodePrevN_2_0)
+            #error "missing argument to template parameter NodePrevN_2_0"
+        #endif
+        #if ! defined(NodeToValue_2_0)
+            #error "missing argument to template parameter NodeToValue_2_0"
+        #endif
+        #if ! defined(ValueToNode_2_0)
+            #error "missing argument to template parameter ValueToNode_2_0"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_2_0
+        #undef NodePrevN_2_0
+        #undef NodeToValue_2_0
+        #undef ValueToNode_2_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define prev_n_2_1_H 1
+        #if ! defined(FuncName_2_1)
+            #error "missing argument to template parameter FuncName_2_1"
+        #endif
+        #if ! defined(NodePrevN_2_1)
+            #error "missing argument to template parameter NodePrevN_2_1"
+        #endif
+        #if ! defined(NodeToValue_2_1)
+            #error "missing argument to template parameter NodeToValue_2_1"
+        #endif
+        #if ! defined(ValueToNode_2_1)
+            #error "missing argument to template parameter ValueToNode_2_1"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_2_1
+        #undef NodePrevN_2_1
+        #undef NodeToValue_2_1
+        #undef ValueToNode_2_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define prev_n_2_2_H 1
+        #if ! defined(FuncName_2_2)
+            #error "missing argument to template parameter FuncName_2_2"
+        #endif
+        #if ! defined(NodePrevN_2_2)
+            #error "missing argument to template parameter NodePrevN_2_2"
+        #endif
+        #if ! defined(NodeToValue_2_2)
+            #error "missing argument to template parameter NodeToValue_2_2"
+        #endif
+        #if ! defined(ValueToNode_2_2)
+            #error "missing argument to template parameter ValueToNode_2_2"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_2_2
+        #undef NodePrevN_2_2
+        #undef NodeToValue_2_2
+        #undef ValueToNode_2_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define prev_n_2_3_H 1
+        #if ! defined(FuncName_2_3)
+            #error "missing argument to template parameter FuncName_2_3"
+        #endif
+        #if ! defined(NodePrevN_2_3)
+            #error "missing argument to template parameter NodePrevN_2_3"
+        #endif
+        #if ! defined(NodeToValue_2_3)
+            #error "missing argument to template parameter NodeToValue_2_3"
+        #endif
+        #if ! defined(ValueToNode_2_3)
+            #error "missing argument to template parameter ValueToNode_2_3"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_2_3
+        #undef NodePrevN_2_3
+        #undef NodeToValue_2_3
+        #undef ValueToNode_2_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define prev_n_2_4_H 1
+        #if ! defined(FuncName_2_4)
+            #error "missing argument to template parameter FuncName_2_4"
+        #endif
+        #if ! defined(NodePrevN_2_4)
+            #error "missing argument to template parameter NodePrevN_2_4"
+        #endif
+        #if ! defined(NodeToValue_2_4)
+            #error "missing argument to template parameter NodeToValue_2_4"
+        #endif
+        #if ! defined(ValueToNode_2_4)
+            #error "missing argument to template parameter ValueToNode_2_4"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_2_4
+        #undef NodePrevN_2_4
+        #undef NodeToValue_2_4
+        #undef ValueToNode_2_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 3
+    #if NSTL_DEPTH == 0
+        #define prev_n_3_0_H 1
+        #if ! defined(FuncName_3_0)
+            #error "missing argument to template parameter FuncName_3_0"
+        #endif
+        #if ! defined(NodePrevN_3_0)
+            #error "missing argument to template parameter NodePrevN_3_0"
+        #endif
+        #if ! defined(NodeToValue_3_0)
+            #error "missing argument to template parameter NodeToValue_3_0"
+        #endif
+        #if ! defined(ValueToNode_3_0)
+            #error "missing argument to template parameter ValueToNode_3_0"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_3_0
+        #undef NodePrevN_3_0
+        #undef NodeToValue_3_0
+        #undef ValueToNode_3_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define prev_n_3_1_H 1
+        #if ! defined(FuncName_3_1)
+            #error "missing argument to template parameter FuncName_3_1"
+        #endif
+        #if ! defined(NodePrevN_3_1)
+            #error "missing argument to template parameter NodePrevN_3_1"
+        #endif
+        #if ! defined(NodeToValue_3_1)
+            #error "missing argument to template parameter NodeToValue_3_1"
+        #endif
+        #if ! defined(ValueToNode_3_1)
+            #error "missing argument to template parameter ValueToNode_3_1"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_3_1
+        #undef NodePrevN_3_1
+        #undef NodeToValue_3_1
+        #undef ValueToNode_3_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define prev_n_3_2_H 1
+        #if ! defined(FuncName_3_2)
+            #error "missing argument to template parameter FuncName_3_2"
+        #endif
+        #if ! defined(NodePrevN_3_2)
+            #error "missing argument to template parameter NodePrevN_3_2"
+        #endif
+        #if ! defined(NodeToValue_3_2)
+            #error "missing argument to template parameter NodeToValue_3_2"
+        #endif
+        #if ! defined(ValueToNode_3_2)
+            #error "missing argument to template parameter ValueToNode_3_2"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_3_2
+        #undef NodePrevN_3_2
+        #undef NodeToValue_3_2
+        #undef ValueToNode_3_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define prev_n_3_3_H 1
+        #if ! defined(FuncName_3_3)
+            #error "missing argument to template parameter FuncName_3_3"
+        #endif
+        #if ! defined(NodePrevN_3_3)
+            #error "missing argument to template parameter NodePrevN_3_3"
+        #endif
+        #if ! defined(NodeToValue_3_3)
+            #error "missing argument to template parameter NodeToValue_3_3"
+        #endif
+        #if ! defined(ValueToNode_3_3)
+            #error "missing argument to template parameter ValueToNode_3_3"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_3_3
+        #undef NodePrevN_3_3
+        #undef NodeToValue_3_3
+        #undef ValueToNode_3_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define prev_n_3_4_H 1
+        #if ! defined(FuncName_3_4)
+            #error "missing argument to template parameter FuncName_3_4"
+        #endif
+        #if ! defined(NodePrevN_3_4)
+            #error "missing argument to template parameter NodePrevN_3_4"
+        #endif
+        #if ! defined(NodeToValue_3_4)
+            #error "missing argument to template parameter NodeToValue_3_4"
+        #endif
+        #if ! defined(ValueToNode_3_4)
+            #error "missing argument to template parameter ValueToNode_3_4"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_3_4
+        #undef NodePrevN_3_4
+        #undef NodeToValue_3_4
+        #undef ValueToNode_3_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 4
+    #if NSTL_DEPTH == 0
+        #define prev_n_4_0_H 1
+        #if ! defined(FuncName_4_0)
+            #error "missing argument to template parameter FuncName_4_0"
+        #endif
+        #if ! defined(NodePrevN_4_0)
+            #error "missing argument to template parameter NodePrevN_4_0"
+        #endif
+        #if ! defined(NodeToValue_4_0)
+            #error "missing argument to template parameter NodeToValue_4_0"
+        #endif
+        #if ! defined(ValueToNode_4_0)
+            #error "missing argument to template parameter ValueToNode_4_0"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_4_0
+        #undef NodePrevN_4_0
+        #undef NodeToValue_4_0
+        #undef ValueToNode_4_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define prev_n_4_1_H 1
+        #if ! defined(FuncName_4_1)
+            #error "missing argument to template parameter FuncName_4_1"
+        #endif
+        #if ! defined(NodePrevN_4_1)
+            #error "missing argument to template parameter NodePrevN_4_1"
+        #endif
+        #if ! defined(NodeToValue_4_1)
+            #error "missing argument to template parameter NodeToValue_4_1"
+        #endif
+        #if ! defined(ValueToNode_4_1)
+            #error "missing argument to template parameter ValueToNode_4_1"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_4_1
+        #undef NodePrevN_4_1
+        #undef NodeToValue_4_1
+        #undef ValueToNode_4_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define prev_n_4_2_H 1
+        #if ! defined(FuncName_4_2)
+            #error "missing argument to template parameter FuncName_4_2"
+        #endif
+        #if ! defined(NodePrevN_4_2)
+            #error "missing argument to template parameter NodePrevN_4_2"
+        #endif
+        #if ! defined(NodeToValue_4_2)
+            #error "missing argument to template parameter NodeToValue_4_2"
+        #endif
+        #if ! defined(ValueToNode_4_2)
+            #error "missing argument to template parameter ValueToNode_4_2"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_4_2
+        #undef NodePrevN_4_2
+        #undef NodeToValue_4_2
+        #undef ValueToNode_4_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define prev_n_4_3_H 1
+        #if ! defined(FuncName_4_3)
+            #error "missing argument to template parameter FuncName_4_3"
+        #endif
+        #if ! defined(NodePrevN_4_3)
+            #error "missing argument to template parameter NodePrevN_4_3"
+        #endif
+        #if ! defined(NodeToValue_4_3)
+            #error "missing argument to template parameter NodeToValue_4_3"
+        #endif
+        #if ! defined(ValueToNode_4_3)
+            #error "missing argument to template parameter ValueToNode_4_3"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_4_3
+        #undef NodePrevN_4_3
+        #undef NodeToValue_4_3
+        #undef ValueToNode_4_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define prev_n_4_4_H 1
+        #if ! defined(FuncName_4_4)
+            #error "missing argument to template parameter FuncName_4_4"
+        #endif
+        #if ! defined(NodePrevN_4_4)
+            #error "missing argument to template parameter NodePrevN_4_4"
+        #endif
+        #if ! defined(NodeToValue_4_4)
+            #error "missing argument to template parameter NodeToValue_4_4"
+        #endif
+        #if ! defined(ValueToNode_4_4)
+            #error "missing argument to template parameter ValueToNode_4_4"
+        #endif
+        #include "prev_n.body"
+        #undef FuncName_4_4
+        #undef NodePrevN_4_4
+        #undef NodeToValue_4_4
+        #undef ValueToNode_4_4
+    #endif
+#endif

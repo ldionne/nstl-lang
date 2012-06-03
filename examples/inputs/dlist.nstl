@@ -1,0 +1,95 @@
+
+namespace nstl { namespace linear { namespace dlist {
+    
+    namespace _internal {
+        
+    }
+    
+    namespace access {
+        
+        template front (FuncName(func), Container, ValueType)
+        {
+            import dlist.iterator.begin
+            {%
+                static inline ValueType_ FuncName_(front) (Container_ *list)
+                {
+                	return *FuncName_(begin)(list);
+                }
+            %}
+        }
+        
+        template back (FuncName(func), Container, ValueType)
+        {
+            import nstl.iterator.bidirectional.prev, dlist.iterator.end
+            {%
+                static inline ValueType_ FuncName_(back) (Container_ *list)
+                {
+                	return *FuncName_(prev)(FuncName_(end)(list));
+                }
+            %}
+        }
+    }
+    
+    namespace iterator {
+        
+        template begin (FuncName(func), Container)
+        {
+            import Iterator//, nstl.linear.dlist._internal.iter_from_generic
+            {%
+                static inline Iterator_ FuncName_(begin) (Container_ *list)
+                {
+                	return FuncName_(nstl_linear_dlist_internal_iter_from_generic)(list->sentinel->next);
+                }
+            %}
+        }
+        
+        template rbegin (FuncName(func), Container)
+        {
+            import Iterator, nstl.iterator.bidirectional.prev, end
+            {%
+                static inline Iterator_ FuncName_(rbegin) (Container_ *list)
+                {
+                	return FuncName_(prev)(FuncName_(end)(list));
+                }
+            %}
+        }
+        
+        template end (FuncName(func), Container)
+        {
+            import Iterator//, nstl.linear.dlist._internal.iter_from_generic
+            {%
+                static inline Iterator_ FuncName_(end) (Container_ *list)
+                {
+                	return FuncName_(nstl_linear_dlist_internal_iter_from_generic)(list->sentinel);
+                }
+            %}
+        }
+        
+        template rend (FuncName(func), Container)
+        {
+            import Iterator, end
+            {%
+                static inline Iterator_ FuncName_(rend) (Container_ *list)
+                {
+                	return FuncName_(end)(list);
+                }
+            %}
+        }
+    }
+    
+    namespace capacity {
+        
+        template empty (FuncName(func), Container)
+        {
+            import iterator.begin, iterator.end
+            {%
+                #include <stdbool.h>
+                static inline bool FuncName_(isempty) (Container_ *list)
+                {
+                	return FuncName_(begin)(list) == FuncName_(end)(list);
+                }
+            %}
+        }
+        
+    }
+}}}

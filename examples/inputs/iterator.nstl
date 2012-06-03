@@ -1,0 +1,10 @@
+
+namespace nstl { namespace iterator {
+    
+    template Iterator (ValueType, Iterator)
+    {
+        {%
+            typedef ValueType_ *Iterator_;
+        %}
+    }
+}}

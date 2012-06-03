@@ -1,0 +1,9 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+
+                static inline Iterator_ FuncName_(begin) (Container_ *list)
+                {
+                	return FuncName_(nstl_linear_dlist_internal_iter_from_generic)(list->sentinel->next);
+                }
+            

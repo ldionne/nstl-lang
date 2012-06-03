@@ -1,0 +1,12 @@
+#if CONCAT(prev_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "prev.contents"
+#endif
+#if CONCAT(end_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "end.contents"
+#endif
+
+                static inline ValueType_ FuncName_(back) (Container_ *list)
+                {
+                	return *FuncName_(prev)(FuncName_(end)(list));
+                }
+            

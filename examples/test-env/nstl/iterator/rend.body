@@ -1,0 +1,12 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+#if CONCAT(end_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "end.contents"
+#endif
+
+                static inline Iterator_ FuncName_(rend) (Container_ *list)
+                {
+                	return FuncName_(end)(list);
+                }
+            

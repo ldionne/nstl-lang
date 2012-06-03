@@ -1,0 +1,42 @@
+
+namespace nstl { namespace iterator { namespace bidirectional {
+    
+    /*  iter - 1    */
+    template prev (FuncName(func), NodePrev(node), NodeToValue(node), ValueToNode(value))
+    {
+        import Iterator
+        {%
+            static inline Iterator_ FuncName_(prev) (Iterator_ iter)
+            {
+            	return NodeToValue_(NodePrev_(ValueToNode_(iter)));
+            }
+        %}
+    }
+    
+    /*  --iter  */
+    template predecr (FuncName(func))
+    {
+        import Iterator, prev
+        {%
+            static inline Iterator_ FuncName_(predecr) (Iterator_ *iter)
+            {
+            	*iter = FuncName_(prev)(*iter);
+            	return *iter;
+            }
+        %}
+    }
+    
+    /*  iter--  */
+    template postdecr (FuncName(func))
+    {
+        import Iterator, predecr
+        {%
+            static inline Iterator_ FuncName_(postdecr) (Iterator_ *iter)
+            {
+            	Iterator_ const tmp = *iter;
+            	FuncName_(predecr)(iter);
+            	return tmp;
+            }
+        %}
+    }
+}}}

@@ -1,0 +1,51 @@
+
+namespace nstl { namespace iterator { namespace randomaccess {
+    
+    /*  iter + n    */
+    template next_n (FuncName(func), NodeNextN(node), NodeToValue(node), ValueToNode(value))
+    {
+        import Iterator
+        {%
+            static inline Iterator_ FuncName_(next_n) (Iterator_ iter, size_t n)
+            {
+            	return NodeToValue_(NodeNextN_(ValueToNode_(iter), n));
+            }
+        %}
+    }
+    
+    /*  iter += n   */
+    template advance (FuncName(func))
+    {
+        import Iterator, next_n
+        {%
+            static inline Iterator_ FuncName_(advance) (Iterator_ *iter, size_t n)
+            {
+            	return *iter = FuncName_(next_n)(*iter, n);
+            }
+        %}
+    }
+    
+    /*  iter - n    */
+    template prev_n (FuncName(func), NodePrevN(node), NodeToValue(node), ValueToNode(value))
+    {
+        import Iterator
+        {%
+            static inline Iterator_ FuncName_(prev_n) (Iterator_ iter, size_t n)
+            {
+            	return NodeToValue_(NodePrevN(ValueToNode_(iter), n));
+            }
+        %}
+    }
+    
+    /*  iter -= n   */
+    template rewind (FuncName(func))
+    {
+        import Iterator, prev_n
+        {%
+            static inline Iterator_ FuncName_(rewind) (Iterator_ *iter, size_t n)
+            {
+            	return *iter = FuncName_(prev_n)(*iter, n);
+            }
+        %}
+    }
+}}}

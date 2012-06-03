@@ -1,0 +1,17 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+#if CONCAT(preincr_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "preincr.contents"
+#endif
+
+            static inline size_t FuncName_(distance) (Iterator_ first, Iterator_ last)
+            {
+            	size_t n = 0;
+            	while (first != last) {
+            		FuncName_(preincr)(&first);
+            		n++;
+            	}
+            	return n;
+            }
+        

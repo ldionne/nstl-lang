@@ -1,0 +1,14 @@
+#if CONCAT(Iterator_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "Iterator.contents"
+#endif
+#if CONCAT(predecr_, NSTL_PACKAGE, _, NSTL_DEPTH, _H) != 1
+    #include "predecr.contents"
+#endif
+
+            static inline Iterator_ FuncName_(postdecr) (Iterator_ *iter)
+            {
+            	Iterator_ const tmp = *iter;
+            	FuncName_(predecr)(iter);
+            	return tmp;
+            }
+        

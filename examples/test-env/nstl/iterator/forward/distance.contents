@@ -1,0 +1,210 @@
+#if NSTL_PACKAGE == 0
+    #if NSTL_DEPTH == 0
+        #define distance_0_0_H 1
+        #if ! defined(FuncName_0_0)
+            #error "missing argument to template parameter FuncName_0_0"
+        #endif
+        #include "distance.body"
+        #undef FuncName_0_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define distance_0_1_H 1
+        #if ! defined(FuncName_0_1)
+            #error "missing argument to template parameter FuncName_0_1"
+        #endif
+        #include "distance.body"
+        #undef FuncName_0_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define distance_0_2_H 1
+        #if ! defined(FuncName_0_2)
+            #error "missing argument to template parameter FuncName_0_2"
+        #endif
+        #include "distance.body"
+        #undef FuncName_0_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define distance_0_3_H 1
+        #if ! defined(FuncName_0_3)
+            #error "missing argument to template parameter FuncName_0_3"
+        #endif
+        #include "distance.body"
+        #undef FuncName_0_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define distance_0_4_H 1
+        #if ! defined(FuncName_0_4)
+            #error "missing argument to template parameter FuncName_0_4"
+        #endif
+        #include "distance.body"
+        #undef FuncName_0_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 1
+    #if NSTL_DEPTH == 0
+        #define distance_1_0_H 1
+        #if ! defined(FuncName_1_0)
+            #error "missing argument to template parameter FuncName_1_0"
+        #endif
+        #include "distance.body"
+        #undef FuncName_1_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define distance_1_1_H 1
+        #if ! defined(FuncName_1_1)
+            #error "missing argument to template parameter FuncName_1_1"
+        #endif
+        #include "distance.body"
+        #undef FuncName_1_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define distance_1_2_H 1
+        #if ! defined(FuncName_1_2)
+            #error "missing argument to template parameter FuncName_1_2"
+        #endif
+        #include "distance.body"
+        #undef FuncName_1_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define distance_1_3_H 1
+        #if ! defined(FuncName_1_3)
+            #error "missing argument to template parameter FuncName_1_3"
+        #endif
+        #include "distance.body"
+        #undef FuncName_1_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define distance_1_4_H 1
+        #if ! defined(FuncName_1_4)
+            #error "missing argument to template parameter FuncName_1_4"
+        #endif
+        #include "distance.body"
+        #undef FuncName_1_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 2
+    #if NSTL_DEPTH == 0
+        #define distance_2_0_H 1
+        #if ! defined(FuncName_2_0)
+            #error "missing argument to template parameter FuncName_2_0"
+        #endif
+        #include "distance.body"
+        #undef FuncName_2_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define distance_2_1_H 1
+        #if ! defined(FuncName_2_1)
+            #error "missing argument to template parameter FuncName_2_1"
+        #endif
+        #include "distance.body"
+        #undef FuncName_2_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define distance_2_2_H 1
+        #if ! defined(FuncName_2_2)
+            #error "missing argument to template parameter FuncName_2_2"
+        #endif
+        #include "distance.body"
+        #undef FuncName_2_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define distance_2_3_H 1
+        #if ! defined(FuncName_2_3)
+            #error "missing argument to template parameter FuncName_2_3"
+        #endif
+        #include "distance.body"
+        #undef FuncName_2_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define distance_2_4_H 1
+        #if ! defined(FuncName_2_4)
+            #error "missing argument to template parameter FuncName_2_4"
+        #endif
+        #include "distance.body"
+        #undef FuncName_2_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 3
+    #if NSTL_DEPTH == 0
+        #define distance_3_0_H 1
+        #if ! defined(FuncName_3_0)
+            #error "missing argument to template parameter FuncName_3_0"
+        #endif
+        #include "distance.body"
+        #undef FuncName_3_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define distance_3_1_H 1
+        #if ! defined(FuncName_3_1)
+            #error "missing argument to template parameter FuncName_3_1"
+        #endif
+        #include "distance.body"
+        #undef FuncName_3_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define distance_3_2_H 1
+        #if ! defined(FuncName_3_2)
+            #error "missing argument to template parameter FuncName_3_2"
+        #endif
+        #include "distance.body"
+        #undef FuncName_3_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define distance_3_3_H 1
+        #if ! defined(FuncName_3_3)
+            #error "missing argument to template parameter FuncName_3_3"
+        #endif
+        #include "distance.body"
+        #undef FuncName_3_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define distance_3_4_H 1
+        #if ! defined(FuncName_3_4)
+            #error "missing argument to template parameter FuncName_3_4"
+        #endif
+        #include "distance.body"
+        #undef FuncName_3_4
+    #endif
+#endif
+#if NSTL_PACKAGE == 4
+    #if NSTL_DEPTH == 0
+        #define distance_4_0_H 1
+        #if ! defined(FuncName_4_0)
+            #error "missing argument to template parameter FuncName_4_0"
+        #endif
+        #include "distance.body"
+        #undef FuncName_4_0
+    #endif
+    #if NSTL_DEPTH == 1
+        #define distance_4_1_H 1
+        #if ! defined(FuncName_4_1)
+            #error "missing argument to template parameter FuncName_4_1"
+        #endif
+        #include "distance.body"
+        #undef FuncName_4_1
+    #endif
+    #if NSTL_DEPTH == 2
+        #define distance_4_2_H 1
+        #if ! defined(FuncName_4_2)
+            #error "missing argument to template parameter FuncName_4_2"
+        #endif
+        #include "distance.body"
+        #undef FuncName_4_2
+    #endif
+    #if NSTL_DEPTH == 3
+        #define distance_4_3_H 1
+        #if ! defined(FuncName_4_3)
+            #error "missing argument to template parameter FuncName_4_3"
+        #endif
+        #include "distance.body"
+        #undef FuncName_4_3
+    #endif
+    #if NSTL_DEPTH == 4
+        #define distance_4_4_H 1
+        #if ! defined(FuncName_4_4)
+            #error "missing argument to template parameter FuncName_4_4"
+        #endif
+        #include "distance.body"
+        #undef FuncName_4_4
+    #endif
+#endif

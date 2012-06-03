@@ -1,0 +1,58 @@
+
+namespace nstl { namespace iterator { namespace forward {
+    
+    /*  iter + 1    */
+    template next (FuncName(func), NodeNext(node), NodeToValue(node), ValueToNode(value))
+    {
+        import Iterator
+        {%
+            static inline Iterator_ FuncName_(next) (Iterator_ iter)
+            {
+            	return NodeToValue_(NodeNext_(ValueToNode_(iter)));
+            }
+        %}
+    }
+    
+    /*  ++iter  */
+    template preincr (FuncName(func))
+    {
+        import Iterator, next
+        {%
+            static inline Iterator_ FuncName_(preincr) (Iterator_ *iter)
+            {
+            	return *iter = FuncName_(next)(*iter);
+            }
+        %}
+    }
+    
+    /*  iter++  */
+    template postincr (FuncName(func))
+    {
+        import Iterator, preincr
+        {%
+            static inline Iterator_ FuncName_(postincr) (Iterator_ *iter)
+            {
+            	Iterator_ const tmp = *iter;
+            	FuncName_(preincr)(iter);
+            	return tmp;
+            }
+        %}
+    }
+    
+    /*  first - last    */
+    template distance (FuncName(func))
+    {
+        import Iterator, preincr
+        {%
+            static inline size_t FuncName_(distance) (Iterator_ first, Iterator_ last)
+            {
+            	size_t n = 0;
+            	while (first != last) {
+            		FuncName_(preincr)(&first);
+            		n++;
+            	}
+            	return n;
+            }
+        %}
+    }
+}}}
